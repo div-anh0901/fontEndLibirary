@@ -46,3 +46,8 @@ export const GeneralAppPage = Loadable(lazy(() => import('../pages/dashboard/Gen
 //Category
 export const CategoryPage = Loadable(lazy(() => import('../pages/dashboard/CategoryPage')));
 
+
+//Users
+export const ListAllUserPage = Loadable(lazy(() => import('../pages/user/ListUserPage')));
+export const AccountPage = Loadable(lazy(() => import('../pages/user/AccountPage')));
+export const NewAccount = Loadable(lazy(() => import('../pages/user/NewAccount')));

@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import {useEffect, useState} from 'react'; 
+import {useEffect, useMemo, useState} from 'react'; 
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -44,18 +44,10 @@ import {
   } from '../../components/table';
 
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../sections/@dashboard/invoice/list';
-import { useDispatch, useSelector } from 'src/redux/store';
+import { dispatch, useDispatch, useSelector } from 'src/redux/store';
 import { fetchBookThunk } from 'src/redux/slices/book';
 import { FetchBooks } from 'src/utils/types';
 import { BookTableToolbar } from 'src/sections/@dashboard/book/list';
-const SERVICE_OPTIONS = [
-  'all',
-  'full stack development',
-  'backend development',
-  'ui design',
-  'ui/ux design',
-  'front end development',
-];
   const TABLE_HEAD = [
     { id: 'invoiceNumber', label: 'Client', align: 'left' },
     { id: 'title', label: 'Title', align: 'left' },
@@ -66,12 +58,11 @@ const SERVICE_OPTIONS = [
     { id: '' },
   ];
 export default function BookListPage() {
+  
     const theme = useTheme();
     const navigate = useNavigate();
     const bookData = useSelector(state=> state.books.books);
     const categoriesOption = useSelector(state=> state.categories.categories);
-   
-    
     const {
         dense,
         page,
@@ -93,7 +84,7 @@ export default function BookListPage() {
       const { themeStretch } = useSettingsContext();
       const [tableData, setTableData] = useState(bookData);
       const [filterTitle, setFilterTitle] = useState('');
-
+      
       const [openConfirm, setOpenConfirm] = useState(false);
     
       const [filterStatus, setFilterStatus] = useState('all');
@@ -149,7 +140,7 @@ export default function BookListPage() {
     };
 
     const handleViewRow = (id: string) => {
-    // navigate(PATH_DASHBOARD.invoice.view(id));
+      navigate(PATH_DASHBOARD.book.view(parseInt(id)));
     };
     
     const isFiltered = filterTitle !== '' 

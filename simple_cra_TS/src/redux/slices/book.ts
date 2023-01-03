@@ -1,14 +1,16 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createBook as createBookAPI, listBooks as listBooksAPI,getBookById as getBookByIdAPI } from "src/utils/axios";
 import { CreateBook, FetchBooks } from "src/utils/types";
 
 export interface BooksState {
     books: FetchBooks[];
+   
 }
 
 
 const initialState: BooksState = {
     books: [],
+   
 }
 
 export const createBookThunk = createAsyncThunk(
@@ -33,16 +35,18 @@ export const booksSlice =  createSlice({
     name:'books',
     initialState,
     reducers:{
+        
 
     },
     extraReducers(builder) {
         builder
             .addCase(createBookThunk.fulfilled,(state,action)=>{
-                state.books = action.payload.data;
+                state.books.push(action.payload.data);
+                
             })
             .addCase(fetchBookThunk.fulfilled,(state,action)=>{
                 state.books =action.payload.data;
-             
+               
             })
     },
 });

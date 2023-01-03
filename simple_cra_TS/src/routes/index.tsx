@@ -27,8 +27,12 @@ import {
   CategoryPage,
   BookPostPage,
   BookEditPage,
+  ListAllUserPage,
+  AccountPage,
+  NewAccount,
 } from './elements';
 import BlogPostPage from 'src/pages/dashboard/BlogPostPage';
+import ViewDetailBookPage from 'src/pages/dashboard/book/ViewDetailBookPage';
 
 // ----------------------------------------------------------------------
 
@@ -81,6 +85,9 @@ export default function Router() {
           children: [
             { element: <Navigate to="/dashboard/user/four" replace />, index: true },
             { path: 'four', element: <PageFour /> },
+            {path: 'list', element: <ListAllUserPage /> },
+            {path: 'new', element: <NewAccount /> },
+            {path: ':email/account', element: <AccountPage /> },
             { path: 'five', element: <PageFive /> },
             { path: 'six', element: <PageSix /> },
           ],
@@ -102,6 +109,7 @@ export default function Router() {
             { path: 'lists', element: <BookListsPage /> },
             { path: 'create', element: <BookPostPage /> },
             { path: 'edit/:id', element: <BookEditPage /> },
+            { path: 'view/:id', element: <ViewDetailBookPage /> },
           ],
         },
         {

@@ -21,7 +21,10 @@ export const PATH_DASHBOARD = {
   two: path(ROOTS_DASHBOARD, '/two'),
   three: path(ROOTS_DASHBOARD, '/three'),
   user: {
+    list: path(ROOTS_DASHBOARD, '/user/list'),
     root: path(ROOTS_DASHBOARD, '/user'),
+    newAccount : path(ROOTS_DASHBOARD, '/user/new'),
+    account: (email: string) => path(ROOTS_DASHBOARD, `/user/${email}/account`),
     four: path(ROOTS_DASHBOARD, '/user/four'),
     five: path(ROOTS_DASHBOARD, '/user/five'),
     six: path(ROOTS_DASHBOARD, '/user/six'),
@@ -37,6 +40,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/book'),
     post: path(ROOTS_DASHBOARD, '/book/create'),
     edit: (id: number) => path(ROOTS_DASHBOARD, `/book/edit/${id}`),
+    view: (id: number) => path(ROOTS_DASHBOARD, `/book/view/${id}`),
   },
   category:{
     list: path(ROOTS_DASHBOARD, '/category'),

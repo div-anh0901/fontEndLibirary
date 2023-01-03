@@ -12,6 +12,8 @@ import { useDispatch } from './redux/store';
 import { useEffect } from 'react';
 import { fetchBookThunk } from './redux/slices/book';
 import { fetchCategoriesThunk } from './redux/slices/category';
+import { fetchUserThunk } from './redux/slices/user';
+import { fetchOrderBookThunk } from './redux/slices/order';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +23,8 @@ export default function App() {
   if(accessToken != null){
     dispatch(fetchBookThunk());
     dispatch(fetchCategoriesThunk());
+    dispatch(fetchUserThunk());
+    dispatch(fetchOrderBookThunk());
   }
 
   return (

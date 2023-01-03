@@ -1,19 +1,31 @@
 
-export type User ={
-    _id: String;
-    name: String;
-    username:String;
+export type User = {
+    id: number;
+    name: string;
+    username:string;
     password: string;
-    email:String;
-    avatar: String;
-    address: String;
-    status:  String;
-    roles:Role;
+    email:string;
+    avatar: string;
+    address: string;
+    status:  string;
+    virtualWallet: number;
+    roles:Role[];
 }
 
-export type Role = [
-    {id: number,name: String}
-]
+export type CreateUser ={
+    name: string;
+    username:string;
+    password: string;
+    email:string;
+    avatar: string;
+    address: string;
+    status:  number;
+    virtualWallet: number;
+}
+
+export type Role =  {id: number,name: string}
+
+export type AddRole ={email: string, roleName: string}
 
 export type  Category ={
     name: string;
@@ -72,4 +84,35 @@ export type FetchBooks = {
         category: FetchCategory
   };
   
+
+export type OrderBook ={
+    orderId: string;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    address: string;
+    status: string;
+    totalDeposit: number;
+    totalRent: number;
+    user: User;
+}
+
+export  type CreateOrder ={
+    userId: number;
+    fullName : string | null;
+    email: string |null;
+    phoneNumber: string | null;
+    address: string | null;
+    totalDeposit: number | null;
+    totalRent: number| null;
+}
+
+export type addOrderItem ={
+    order: OrderBook;
+    book: FetchBooks;
+    bookId: number;
+    quantity: number;
+    borrowedAt: string;
+    returnedAt: string;
   
+}

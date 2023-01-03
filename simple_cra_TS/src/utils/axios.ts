@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 // config
 import { HOST_API_KEY } from '../config';
-import { Category, CreateBook, FetchBooks, FetchCategory, PutBook } from './types';
+import { AddRole, OrderBook, Category, CreateBook, CreateUser, FetchBooks, FetchCategory, PutBook, User, CreateOrder } from './types';
 
 // ----------------------------------------------------------------------
 
@@ -16,6 +16,15 @@ axiosInstance.interceptors.response.use(
 export const createCategory  = (data:Category) => axiosInstance.post('/api/categories/add',data,config);
 export const getCategorys  = () => axiosInstance.get<FetchCategory[]>('/api/categories',config);
 export const updateCategorys = (data:FetchCategory) => axiosInstance.put('/api/categories/save/' + data.categoryId, data,config);
+
+//User
+export const listUsers = ()=> axiosInstance.get<User[]>('/api/users',config);
+export const addRoles = (data: AddRole)=> axiosInstance.post('/api/role/addtouser',data,config);
+export  const  createUser = (data: CreateUser) =>  axiosInstance.post('/api/user/save',data);
+
+//borrowBook
+export const listOrders = ()=>  axiosInstance.get<OrderBook[]>('/api/orders',config)
+export const createOrder = (data: CreateOrder)=> axiosInstance.post('/api/orders/add?userId=' + data.userId,data,config);
 
 
 //Book 

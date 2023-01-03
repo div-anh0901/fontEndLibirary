@@ -4,6 +4,8 @@ import storage from 'redux-persist/lib/storage';
 import chatReducer from './slices/chat';
 import categoryReducer from './slices/category';
 import bookReducer from './slices/book';
+import userReducer from './slices/user';
+import orderBookReducer from './slices/order';
 // slices
 
 
@@ -26,7 +28,9 @@ const productPersistConfig = {
 const rootReducer = combineReducers({
     chat: chatReducer,
     categories:categoryReducer,
-    books:bookReducer
+    books:bookReducer,
+    users: userReducer,
+    orderBook: orderBookReducer
 });
 
 export { rootPersistConfig, rootReducer };
