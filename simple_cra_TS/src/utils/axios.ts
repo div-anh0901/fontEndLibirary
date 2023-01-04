@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 // config
 import { HOST_API_KEY } from '../config';
-import { AddRole, OrderBook, Category, CreateBook, CreateUser, FetchBooks, FetchCategory, PutBook, User, CreateOrder } from './types';
+import { AddRole, OrderBook, Category, CreateBook, CreateUser, FetchBooks, FetchCategory, PutBook, User, CreateOrder, addOrderItem } from './types';
 
 // ----------------------------------------------------------------------
 
@@ -22,9 +22,18 @@ export const listUsers = ()=> axiosInstance.get<User[]>('/api/users',config);
 export const addRoles = (data: AddRole)=> axiosInstance.post('/api/role/addtouser',data,config);
 export  const  createUser = (data: CreateUser) =>  axiosInstance.post('/api/user/save',data);
 
-//borrowBook
+//borrowBook order
 export const listOrders = ()=>  axiosInstance.get<OrderBook[]>('/api/orders',config)
 export const createOrder = (data: CreateOrder)=> axiosInstance.post('/api/orders/add?userId=' + data.userId,data,config);
+export const updateOrder = (data: OrderBook)=>axiosInstance.put('/api/orders/save?orderID' + data.orderId,data,config);
+
+//order item
+export const createOrderItem = (data: addOrderItem)=>axiosInstance.post('/api/order_items/add?orderID='+data.order.orderId.toString()+ "&bookId="+data.bookId,{
+    quantity: data.quantity,
+    borrowedAt: data.borrowedAt,
+    returnedAt: data.returnedAt
+},config);
+
 
 
 //Book 

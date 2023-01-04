@@ -41,19 +41,25 @@ export const orderBookSlice = createSlice({
             state.addOrder = checkAddOrder;
         },
         onIncreaseQty : (state,action:PayloadAction<addOrderItem>)=>{
-            console.log(12)
-            const  orderItem = action.payload;
             const findOrder  = state.addOrder.find(add => add.bookId === action.payload.bookId);
-            var amout: number = orderItem.quantity;
             const orderItemIndex = state.addOrder.findIndex(add=> add.bookId === action.payload.bookId)
-            amout += 1
-         
+           
             if(findOrder){
-                orderItem.quantity =amout;
-                state.addOrder[orderItemIndex] = orderItem
+                findOrder.quantity++;
+                state.addOrder[orderItemIndex] = findOrder
             }
            
-        }
+        },
+        onDecreaseQty: (state,action:PayloadAction<addOrderItem>)=>{
+            const findOrder  = state.addOrder.find(add => add.bookId === action.payload.bookId);
+            const orderItemIndex = state.addOrder.findIndex(add=> add.bookId === action.payload.bookId)
+           
+            if(findOrder){
+                findOrder.quantity--;
+                state.addOrder[orderItemIndex] = findOrder
+            }
+           
+        },
     },
     extraReducers(builder) {
         builder
@@ -69,6 +75,6 @@ export const orderBookSlice = createSlice({
 export const selectAddOrder =(state:RootState) => state.orderBook.addOrder;
 
 
-export const {addOrderItemStore,deleteOrderItemStore,onIncreaseQty} = orderBookSlice.actions;
+export const {addOrderItemStore,deleteOrderItemStore,onIncreaseQty,onDecreaseQty} = orderBookSlice.actions;
 
 export default orderBookSlice.reducer;

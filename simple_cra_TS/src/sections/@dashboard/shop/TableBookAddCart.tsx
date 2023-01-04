@@ -21,11 +21,13 @@ const TABLE_HEAD = [
   type  Props={
     orderBook: OrderBook;
     closeFormListBook: (type: boolean) => void;
+    setTotalOrder:  (type: number)=>void;
+    totalOrder: number;
   }
 
 
 
-export default function TableBookAddCart({orderBook,closeFormListBook}: Props) {
+export default function TableBookAddCart({orderBook,closeFormListBook,totalOrder,setTotalOrder}: Props) {
     const dispatch = useDispatch();
     const [bookObject,setBookObject] = useState<{[id: string]:FetchBooks}>({})
     
@@ -62,16 +64,19 @@ export default function TableBookAddCart({orderBook,closeFormListBook}: Props) {
         if(selected.length!== 0){
             const bookStore: addOrderItem[]= [];
             for(var i = 0 ; i < selected.length ; i++){
+                totalOrder+= (bookObject[selected[i]+""].price + bookObject[selected[i]+""].borrowPrice);
+                var startedDate = new  Date(Date.now()).getTime()
                 bookStore.push({
                     order:orderBook,
                     book:bookObject[selected[i]+""],
                     bookId: parseInt(bookObject[selected[i]+""].id),
                     quantity: 1,
-                    borrowedAt: new  Date(Date.now()).toISOString(),
-                    returnedAt : new  Date(Date.now()).toISOString() 
+                    borrowedAt: new  Date(startedDate).toISOString(),
+                    returnedAt : new  Date(startedDate + 7*24*3600*1000).toISOString()
                 })
                        
             }
+            setTotalOrder(totalOrder);
             dispatch(addOrderItemStore(bookStore))
             closeFormListBook(false);
         }

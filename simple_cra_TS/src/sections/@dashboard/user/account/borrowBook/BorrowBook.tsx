@@ -4,9 +4,10 @@ import React, { SetStateAction, useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import EmptyContent from 'src/components/empty-content/EmptyContent';
 import Iconify from 'src/components/iconify/Iconify';
-import { createOrderThunk, deleteOrderItemStore, selectAddOrder,onIncreaseQty } from 'src/redux/slices/order';
+import { createOrderThunk, deleteOrderItemStore,onDecreaseQty,onIncreaseQty } from 'src/redux/slices/order';
 import { useDispatch, useSelector } from 'src/redux/store';
 import TableBookAddCart from 'src/sections/@dashboard/shop/TableBookAddCart';
+import { createOrderItem } from 'src/utils/axios';
 import { addOrderItem } from 'src/utils/types';
 import CheckoutSummary from './CheckoutSummary';
 import OrderListBook from './OrderListBook';
@@ -14,11 +15,11 @@ import OrderListBook from './OrderListBook';
 export default function BorrowBook() {
     const {email}= useParams();
     const user = useSelector((state)=>state.users.users.find(u=> u.email === email));
-    
+    var totalCount  = 0
     const [isSubmitting,setIsSupmmiting] = useState(false);
     const [showFormBook, setShowFormBook] = useState(false);
     const [showFormOrder, setShowFormOrder] = useState(false);
-    const [totalItems,setTotalItems] = useState(2);
+    const [totalOrder,setTotalOrder] = useState<number>(0);
     const [orderSetup,setOrderSetup] = useState<addOrderItem[] | []>([]);
     const dispatch = useDispatch();
     const order = useSelector((state)=> state.orderBook.orderBooks.find((or=> or.user.id === user?.id && or.status === "PENDING")));
@@ -26,6 +27,10 @@ export default function BorrowBook() {
 
     useMemo(()=>{
       if(orderStore.length >0){
+        for(var i = 0;  i <orderStore.length; ++i){
+          totalCount+= (orderStore[i].quantity *(orderStore[i].book.borrowPrice + orderStore[i].book.price))
+        }
+        setTotalOrder(totalCount)
         setShowFormOrder(true)
       }
     },[orderStore])
@@ -67,8 +72,23 @@ export default function BorrowBook() {
     }
 
     const onDecreaseQuantity =(orderitem: addOrderItem)=>{
-      console.log(234)
+      dispatch(onDecreaseQty(orderitem))
     }
+
+    const handleCheckOut =async ()=>{
+       try {
+          if(orderStore.length>0){
+            for(var i = 0 ; i <  orderStore.length ; i++){
+              await createOrderItem(orderStore[i]);
+            }
+          }
+          window.location.reload()
+       } catch (err) {
+          console.log(err)
+       }
+    }
+
+    
   return (
     <div>
       {order ? <>
@@ -77,7 +97,12 @@ export default function BorrowBook() {
             {
               showFormBook ? 
               <>
-                <TableBookAddCart orderBook={order} closeFormListBook={setShowFormBook} />
+                <TableBookAddCart 
+                    orderBook={order} 
+                    closeFormListBook={setShowFormBook}  
+                    setTotalOrder={setTotalOrder} 
+                    totalOrder = {totalOrder}    
+                />
               </>:
               <Card style={{"height": "500px" }} sx={{ mb: 3 }}>
                   <Stack direction="row" justifyContent="space-between">
@@ -123,7 +148,7 @@ export default function BorrowBook() {
           <Grid item xs={12} md={3}>
         <CheckoutSummary
           enableDiscount
-          total={0}
+          total={totalOrder}
           discount={0}
           subtotal={0}
           onApplyDiscount={handleApplyDiscount}
@@ -133,8 +158,9 @@ export default function BorrowBook() {
           size="large"
           type="submit"
           variant="contained"
+          onClick={handleCheckOut}
         >
-          Check Out
+          Create
         </Button>
           </Grid>
         </Grid>

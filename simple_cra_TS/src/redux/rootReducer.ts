@@ -6,6 +6,7 @@ import categoryReducer from './slices/category';
 import bookReducer from './slices/book';
 import userReducer from './slices/user';
 import orderBookReducer from './slices/order';
+import orderItemReducer from './slices/orderItem';
 // slices
 
 
@@ -30,7 +31,8 @@ const rootReducer = combineReducers({
     categories:categoryReducer,
     books:bookReducer,
     users: userReducer,
-    orderBook: orderBookReducer
+    orderBook: orderBookReducer,
+    orderItem:orderItemReducer
 });
 
 export { rootPersistConfig, rootReducer };

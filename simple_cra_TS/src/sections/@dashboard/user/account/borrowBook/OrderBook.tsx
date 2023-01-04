@@ -1,5 +1,5 @@
 // @mui
-import { Box, Stack, Divider, TableRow, TableCell, Typography, IconButton } from '@mui/material';
+import { Box, Stack, Divider, TableRow, TableCell, Typography, IconButton, TextField } from '@mui/material';
 // utils
 import { fCurrency } from '../../../../../utils/formatNumber';
 // @types
@@ -11,6 +11,10 @@ import Iconify from '../../../../../components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
 import { IncrementerButton } from '../../../../../components/custom-input';
 import { addOrderItem } from 'src/utils/types';
+import { useState } from 'react';
+import { DatePicker } from '@mui/x-date-pickers';
+import { Controller, useFormContext } from 'react-hook-form';
+import { RHFSelect } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -26,7 +30,7 @@ export default function OrderBook({
     onDecrease,
     onIncrease,
   }: CheckoutProductListRowProps) {
-  
+    const [value, setValue] = useState<Date|null>(new Date());
     const { book, order, quantity} = row;
 
     return (
@@ -39,7 +43,7 @@ export default function OrderBook({
           />
   
           <Stack spacing={0.5}>
-            <Typography noWrap variant="subtitle2" sx={{ maxWidth: 240 }}>
+            <Typography noWrap variant="subtitle2" sx={{ maxWidth: 200 }}>
               {book.title}
             </Typography>
   
@@ -56,7 +60,8 @@ export default function OrderBook({
         </TableCell>
   
         <TableCell>{fCurrency(book.price)}</TableCell>
-  
+        <TableCell>{fCurrency(book.borrowPrice)}</TableCell>
+        <TableCell>7</TableCell>
         <TableCell>
           <Box sx={{ width: 96, textAlign: 'right' }}>
             <IncrementerButton
@@ -73,7 +78,7 @@ export default function OrderBook({
           </Box>
         </TableCell>
   
-        <TableCell align="right">{fCurrency(book.price * quantity)}</TableCell>
+        <TableCell align="right">{fCurrency((book.price + book.borrowPrice )* quantity)}</TableCell>
   
         <TableCell align="right">
           <IconButton onClick={onDelete}>
