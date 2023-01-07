@@ -16,7 +16,7 @@ import { fData } from 'src/utils/formatNumber';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'src/redux/store';
 import { createUserThunk } from 'src/redux/slices/user';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 type FormValuesProps = {
     name: string;
     username:string;
@@ -32,6 +32,7 @@ type FormValuesProps = {
 export default function AccountGeneral() {
     const {email} = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
 
     const UpdateUserSchema = Yup.object().shape({
@@ -58,7 +59,7 @@ export default function AccountGeneral() {
         avatar: user.avatar,
         address: user.address,
         status:0,
-        virtualWallet:50000
+        virtualWallet:user.virtualWallet
       };
     }
   
@@ -75,10 +76,14 @@ export default function AccountGeneral() {
     
       const onSubmit = async (data: FormValuesProps) => {
         try {
+          if(user){
 
-          dispatch(createUserThunk(data));
-          alert(1)
-          
+          }else{
+            dispatch(createUserThunk(data));  
+            navigate("/dashboard/user/list")
+          }
+         
+
         } catch (error) {
           console.error(error);
         }
@@ -147,7 +152,7 @@ export default function AccountGeneral() {
 
                 <RHFTextField name="address" label="Address" />
                 <RHFTextField type="number" name="status" label="Status" />
-                <RHFTextField  name="virtualWallet" label="Virtual Wallet" />
+                <RHFTextField  name="virtualWallet" disabled={true} label="Virtual Wallet" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

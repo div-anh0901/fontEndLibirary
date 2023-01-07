@@ -84,6 +84,17 @@ export type FetchBooks = {
         category: FetchCategory
   };
   
+ export type UpdateOrder =  {
+    orderId: string;
+    status: string;
+    fullName : string | null;
+    email: string |null;
+    phoneNumber: string | null;
+    address: string | null;
+    totalDeposit: number | null;
+    totalRent: number| null;
+    user: User;
+ } 
 
 export type OrderBook ={
     orderId: string;
@@ -116,5 +127,13 @@ export type addOrderItem ={
     returnedAt: string;
 }
 
+export type FetchOrderItem ={
+    orderItemId: number;
+    quantity: number;
+    book: FetchBooks;
+    borrowedAt: string;
+    returnedAt: string;
+    order:OrderBook
+}
 
 

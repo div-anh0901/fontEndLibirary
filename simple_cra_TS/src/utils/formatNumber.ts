@@ -14,6 +14,7 @@ export function fCurrency(number: InputValue) {
   return result(format+ "VND", '.00' );
 }
 
+
 export function fPercent(number: InputValue) {
   const format = number ? numeral(Number(number) / 100).format('0.0%') : '';
 

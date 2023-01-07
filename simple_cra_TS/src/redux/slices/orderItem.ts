@@ -1,19 +1,29 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { addOrderItem, FetchBooks, OrderBook } from "src/utils/types";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createOrderItem as createOrderItemAPI, getOrderItem as getOrderItemAPI } from "src/utils/axios";
+import { addOrderItem, FetchBooks, FetchOrderItem, OrderBook } from "src/utils/types";
 
 export interface addOrdersState {
-    order ?: OrderBook;
-    book ?:FetchBooks;
-    bookId ?: number;
-    quantity ?: number;
-    borrowedAt?: string;
-    returnedAt?: string;
+    orderItem: FetchOrderItem[]
 }
 
 
 const initialState: addOrdersState = {
-    
+    orderItem: [ ]
 }
+
+export const  CreateOrderItemThunk = createAsyncThunk(
+    'create/order_item',
+    async (data:addOrderItem)=>{
+        return createOrderItemAPI(data);
+    }
+)
+
+export const FetchOrderItemThunk = createAsyncThunk(
+    'fetch/order_item',
+    async ()=>{
+        return getOrderItemAPI();
+    }
+)
 
 export const orderItemSlice = createSlice({
     name:'order',
@@ -22,7 +32,15 @@ export const orderItemSlice = createSlice({
         addOrderItem:  (state, action: any)=>{
             
         }
-    }
+    },extraReducers(builder) {
+        builder
+            .addCase(FetchOrderItemThunk.fulfilled,(state,action)=>{
+                state.orderItem = action.payload.data;
+            })
+            .addCase(CreateOrderItemThunk.fulfilled, (state,action)=>{
+                state.orderItem.push(action.payload.data);
+            })
+    },
 });
 
 export default orderItemSlice.reducer;

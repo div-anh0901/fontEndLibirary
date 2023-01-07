@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from 'src/redux/store';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import { Role, User } from 'src/utils/types';
 import { AddToRoleDialog } from 'src/components/dialog';
+import LoadMoneyDialog from 'src/components/dialog/LoadMoneyDialog';
 const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
 const ROLE_OPTIONS = [
@@ -57,7 +58,8 @@ const ROLE_OPTIONS = [
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', align: 'left' },
   { id: 'email', label: 'Email', align: 'left' },
-  { id: 'company', label: 'Company', align: 'left' },
+  { id: 'company', label: 'Address', align: 'left' },
+  { id: 'money', label: 'Money', align: 'left' },
   { id: 'status', label: 'Status', align: 'left' },
   { id: '' },
 ];
@@ -88,6 +90,9 @@ export default function ListUserPage() {
   } = useTable();
 
   const { themeStretch } = useSettingsContext();
+  const [open,setOpen] = useState(false);// open form add role
+  const [openMoney,setOpenMoney] = useState(false);// open form load money
+  const [userUpdateMoney,setUserUpdateMoney] = useState<User>()
 
   const navigate = useNavigate();
 
@@ -184,14 +189,23 @@ export default function ListUserPage() {
     navigate(PATH_DASHBOARD.user.account(email));
   }
 
-  const [open,setOpen] = useState(false);
+  
   const handleShowFormAddRole = (email: string)=>{
     setUserIdRole(email);
     setOpen(true)
   }
+
   const handleCloseFormAddRole = ()=>{
     
     setOpen(false)
+  }
+
+  const handleShowFormLoadMoney = (data: User)=>{
+    setUserUpdateMoney(data)
+    setOpenMoney(true);
+  }
+  const handleCloseFormLoadMoney = ()=>{
+    setOpenMoney(false);
   }
 
   const handleResetFilter = () => {
@@ -288,6 +302,7 @@ export default function ListUserPage() {
                       onEditRow={() => handleEditRow(row.id)}
                       onViewDetail={() => handleViewRow(row.email)}
                       onShowFormAddRole={() => handleShowFormAddRole(row.email)}
+                      handleShowFormLoadMoney={() => handleShowFormLoadMoney(row)}
                     />
                   ))}
 
@@ -343,6 +358,12 @@ export default function ListUserPage() {
       onClose={handleCloseFormAddRole} 
       onSaveRole={handleCloseFormAddRole}
       email={userIdRole}
+    />
+    <LoadMoneyDialog 
+      open={openMoney} 
+      onClose={handleCloseFormLoadMoney} 
+      onSaveRole={handleCloseFormLoadMoney}
+      user={userUpdateMoney}
     />
 
 

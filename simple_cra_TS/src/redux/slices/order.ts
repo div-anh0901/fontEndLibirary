@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createOrder as createOrderAPI, listOrders as listOrdersAPI  } from "src/utils/axios";
-import { addOrderItem, CreateOrder, OrderBook } from "src/utils/types";
+import { createOrder as createOrderAPI, createOrderItem as createOrderItemAPI, listOrders as listOrdersAPI, updateOrder  as updateOrderAPI } from "src/utils/axios";
+import { addOrderItem, CreateOrder, OrderBook, UpdateOrder } from "src/utils/types";
 import { RootState } from "../store";
 
 
@@ -27,7 +27,17 @@ export const createOrderThunk = createAsyncThunk(
     async (data:CreateOrder)=>{
         return createOrderAPI(data);
     }
-)
+);
+
+export const updateOrderThunk = createAsyncThunk(
+    'update/order',
+    async (data:UpdateOrder)=>{
+        return updateOrderAPI(data);
+    }
+);
+
+
+
 
 export const orderBookSlice = createSlice({
     name:'orders',
@@ -67,7 +77,14 @@ export const orderBookSlice = createSlice({
                 state.orderBooks = action.payload.data;
             })
             .addCase(createOrderThunk.fulfilled,(state,action)=>{
-                
+                state.orderBooks.push(action.payload.data);
+            })
+            .addCase(updateOrderThunk.fulfilled,(state,action)=>{
+                const order= action.payload.data;
+                const findOrderIndex = state.orderBooks.findIndex(ob=> ob.orderId === order.orderId);
+                if(findOrderIndex){
+                    state.orderBooks[findOrderIndex] = order;
+                }
             })
     },
 });

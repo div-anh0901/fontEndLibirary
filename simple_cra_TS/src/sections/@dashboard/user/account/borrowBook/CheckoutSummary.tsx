@@ -15,6 +15,7 @@ import {
   import { fCurrency } from 'src/utils/formatNumber';
   // components
   import Iconify from 'src/components/iconify';
+import { TypeTotal } from './BorrowBook';
   
   // ----------------------------------------------------------------------
   
@@ -22,6 +23,7 @@ import {
     total: number;
     discount?: number;
     subtotal: number;
+    objectTotalOrder?: TypeTotal;
     shipping?: number;
     onEdit?: VoidFunction;
     enableEdit?: boolean;
@@ -35,6 +37,7 @@ import {
     discount,
     subtotal,
     shipping,
+    objectTotalOrder,
     onApplyDiscount,
     enableEdit = false,
     enableDiscount = false,
@@ -59,26 +62,18 @@ import {
           <Stack spacing={2}>
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Sub Total
+                Deposit
               </Typography>
-              <Typography variant="subtitle2">{fCurrency(subtotal)}</Typography>
+              <Typography variant="subtitle2">{fCurrency(objectTotalOrder?.deposit!)}</Typography>
             </Stack>
   
             <Stack direction="row" justifyContent="space-between">
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Discount
+                Rent
               </Typography>
-              <Typography variant="subtitle2">{discount ? fCurrency(-discount) : '-'}</Typography>
+              <Typography variant="subtitle2">{fCurrency(objectTotalOrder?.rent!)}</Typography>
             </Stack>
   
-            <Stack direction="row" justifyContent="space-between">
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                Shipping
-              </Typography>
-              <Typography variant="subtitle2">
-                {shipping ? fCurrency(shipping) : displayShipping}
-              </Typography>
-            </Stack>
   
             <Divider />
   

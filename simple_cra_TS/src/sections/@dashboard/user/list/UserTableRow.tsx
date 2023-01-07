@@ -31,6 +31,7 @@ type Props = {
   onDeleteRow: VoidFunction;
   onViewDetail: VoidFunction;
   onShowFormAddRole: VoidFunction;
+  handleShowFormLoadMoney: VoidFunction
 };
 
 export default function UserTableRow({
@@ -40,9 +41,10 @@ export default function UserTableRow({
   onSelectRow,
   onDeleteRow,
   onViewDetail,
-  onShowFormAddRole
+  onShowFormAddRole,
+  handleShowFormLoadMoney
 }: Props) {
-  const { name, avatar, email, roles, address, status } = row;
+  const { name, avatar, email, roles, address, status ,virtualWallet} = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -82,9 +84,7 @@ export default function UserTableRow({
         </TableCell>
         <TableCell align="left">{email}</TableCell>
         <TableCell align="left">{address}</TableCell>
-
-       
-       
+        <TableCell align="left">{virtualWallet}</TableCell>
         <TableCell align="left">
           <Label
             variant="soft"
@@ -136,6 +136,16 @@ export default function UserTableRow({
         >
           <Iconify icon="eva:edit-fill" />
            Add Role
+        </MenuItem>
+
+        <MenuItem
+          onClick={() => {
+            handleShowFormLoadMoney();
+            handleClosePopover();
+          }}
+        >
+          <Iconify icon="eva:edit-fill" />
+           Load Money
         </MenuItem>
         <Divider/>
 

@@ -15,7 +15,7 @@ const TABLE_HEAD = [
   { id: 'product', label: 'Product' },
   { id: 'price', label: 'Price' },
   { id: 'borrow', label: 'borrow' },
-  {id:'borrowedDays',label:'borrowed days'},
+  { id:'borrowedDays',label:'borrowed days'},
   { id: 'quantity', label: 'Quantity' },
   { id: 'totalPrice', label: 'Total Price', align: 'right' },
   { id: '' },

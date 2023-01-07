@@ -1,31 +1,46 @@
 import { Box, Container, Tab, Tabs } from '@mui/material';
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { useParams } from 'react-router'
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/CustomBreadcrumbs';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
+import { fetchOrderBookThunk } from 'src/redux/slices/order';
+import { useDispatch, useSelector } from 'src/redux/store';
 import { PATH_DASHBOARD } from 'src/routes/paths';
 import AccountGeneral from 'src/sections/@dashboard/user/account/AccountGeneral';
 import AccountNotifications from 'src/sections/@dashboard/user/account/AccountNotifications';
 import AccountSocialLinks from 'src/sections/@dashboard/user/account/AccountSocialLinks';
 import AccountBilling from 'src/sections/@dashboard/user/account/billing/AccountBilling';
 import BorrowBook from 'src/sections/@dashboard/user/account/borrowBook/BorrowBook';
+import CheckoutConfirm from 'src/sections/@dashboard/user/account/borrowBook/CheckoutConfirm';
+import { UpdateOrder } from 'src/utils/types';
 // _mock_
 import { _userPayment, _userAddressBook, _userInvoices, _userAbout } from '../../_mock/arrays';
 
 export default function AccountPage() {
   const  {email} = useParams();
   const { themeStretch } = useSettingsContext();
-
+  const [showFormConfirm,setShowFormConfirm] = useState(false);
+  
+  const orderAVAILABLE = useSelector((state)=> state.orderBook.orderBooks.find((or=> or.user.email === email && or.status === "AVAILABLE")));
+  const [ orderUpdate,setOrderUpdate] = useState<UpdateOrder>()
   const [currentTab, setCurrentTab] = useState('general');
+
+
+  useMemo(()=>{
+    if(orderAVAILABLE){
+      setOrderUpdate(orderAVAILABLE)
+      setShowFormConfirm(true)
+    }
+  },[orderAVAILABLE])
 
   const TABS = [
     {
       value: 'general',
       label: 'General',
       icon: <Iconify icon="ic:round-account-box" />,
-      component: <AccountGeneral />,
+      component:  <AccountGeneral />,
     },
     {
       value: 'billing',
@@ -49,7 +64,7 @@ export default function AccountPage() {
       value: 'brrowBook',
       label: 'BrrowBook',
       icon: <Iconify icon="ic:round-receipt" />,
-      component: <BorrowBook />,
+      component: orderUpdate ? <CheckoutConfirm order={orderAVAILABLE!} /> :<BorrowBook setOrderUpdate={setOrderUpdate} setShowFormConfirm={setShowFormConfirm} />,
     },
   ];
   return (
@@ -63,7 +78,7 @@ export default function AccountPage() {
           heading="Account"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
+            { name: 'User', href: PATH_DASHBOARD.user.list },
             { name: 'Account Settings' },
           ]}
         />

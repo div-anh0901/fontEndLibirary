@@ -37,7 +37,8 @@ export const usersSlice =  createSlice({
                 state.users =action.payload.data;
             })
             .addCase(createUserThunk.fulfilled,(state,action)=>{
-
+                console.log(action.payload.data);
+                state.users.push(action.payload.data);
             })
     },
 });
