@@ -20,8 +20,8 @@ export const  CreateOrderItemThunk = createAsyncThunk(
 
 export const FetchOrderItemThunk = createAsyncThunk(
     'fetch/order_item',
-    async ()=>{
-        return getOrderItemAPI();
+    async (orderId: string)=>{
+        return getOrderItemAPI(orderId);
     }
 )
 

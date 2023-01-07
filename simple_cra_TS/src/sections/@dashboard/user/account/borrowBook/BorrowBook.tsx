@@ -10,7 +10,7 @@ import { CreateOrderItemThunk } from 'src/redux/slices/orderItem';
 import { useDispatch, useSelector } from 'src/redux/store';
 import TableBookAddCart from 'src/sections/@dashboard/shop/TableBookAddCart';
 import { createOrderItem } from 'src/utils/axios';
-import { addOrderItem, UpdateOrder } from 'src/utils/types';
+import { addOrderItem, OrderBook } from 'src/utils/types';
 import CheckoutSummary from './CheckoutSummary';
 import OrderListBook from './OrderListBook';
  export type TypeTotal ={
@@ -21,7 +21,7 @@ import OrderListBook from './OrderListBook';
 
 type Props={
   setShowFormConfirm: (type: boolean)=> void;
-  setOrderUpdate: (data: UpdateOrder) => void;
+  setOrderUpdate: (data: OrderBook) => void;
 }
 
 export default function BorrowBook({setShowFormConfirm,setOrderUpdate}:Props) {
@@ -98,26 +98,27 @@ export default function BorrowBook({setShowFormConfirm,setOrderUpdate}:Props) {
        try {
           if(orderStore.length>0){
             for(var i = 0 ; i <  orderStore.length ; i++){
-              dispatch(CreateOrderItemThunk(orderStore[i]))
+              await createOrderItem(orderStore[i]);
             }
+            //setShowFormConfirm(true)
             if(order !== undefined){
-              var orderUpdate: UpdateOrder = {
+              var orderUpdate: OrderBook = {
                 orderId: order?.orderId,
                 fullName: order?.fullName,
                 email:  order?.email,
                 status: "AVAILABLE",
                 phoneNumber: order?.phoneNumber,
                 address: order?.address,
-                totalDeposit: order.totalDeposit,
-                totalRent: order.totalRent, 
+              
+                totalDeposit: objectTotalOrder.deposit,
+                totalRent: objectTotalOrder.rent,
                 user: order.user
               }
               setOrderUpdate(orderUpdate)
               dispatch(updateOrderThunk(orderUpdate))
             }
-            setShowFormConfirm(true)
-           
           }
+         
        } catch (err) {
           console.log(err)
        }

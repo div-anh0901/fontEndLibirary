@@ -14,7 +14,7 @@ import AccountSocialLinks from 'src/sections/@dashboard/user/account/AccountSoci
 import AccountBilling from 'src/sections/@dashboard/user/account/billing/AccountBilling';
 import BorrowBook from 'src/sections/@dashboard/user/account/borrowBook/BorrowBook';
 import CheckoutConfirm from 'src/sections/@dashboard/user/account/borrowBook/CheckoutConfirm';
-import { UpdateOrder } from 'src/utils/types';
+import { OrderBook } from 'src/utils/types';
 // _mock_
 import { _userPayment, _userAddressBook, _userInvoices, _userAbout } from '../../_mock/arrays';
 
@@ -24,7 +24,7 @@ export default function AccountPage() {
   const [showFormConfirm,setShowFormConfirm] = useState(false);
   
   const orderAVAILABLE = useSelector((state)=> state.orderBook.orderBooks.find((or=> or.user.email === email && or.status === "AVAILABLE")));
-  const [ orderUpdate,setOrderUpdate] = useState<UpdateOrder>()
+  const [ orderUpdate,setOrderUpdate] = useState<OrderBook>()
   const [currentTab, setCurrentTab] = useState('general');
 
 

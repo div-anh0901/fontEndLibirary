@@ -12,6 +12,7 @@ import Label from 'src/components/label/Label';
 import { FetchOrderItem, OrderBook } from 'src/utils/types';
 
 import { fDate, fDateTime } from 'src/utils/formatTime';
+import { getOrderItem } from 'src/utils/axios';
 export type TypeTotal ={
     deposit : number;
     rent: number;
@@ -25,9 +26,19 @@ export default function CheckoutConfirm({order}:Props) {
    
     const [open, setOpen] = useState(false);
     const [orderItemArr,setOrderItemArr] = useState<FetchOrderItem[]>([]);
-    const [objectTotalOrder ,setObjectTotalOrder] = useState<TypeTotal>({"deposit": order.totalDeposit,"rent": order.totalRent ,"sum":0});
+    const [objectTotalOrder ,setObjectTotalOrder] = useState<TypeTotal>({"deposit": order?.totalDeposit!,"rent": order?.totalRent! ,"sum":0});
 
-   
+    useMemo(()=>{
+      const fetchData =async () => {
+        try {
+         const res = await getOrderItem(order.orderId);
+         setOrderItemArr(res.data);
+        } catch (err) {
+          
+        }
+      }
+      fetchData()
+    },[order])
  
 
     const handleOpen = () => {
@@ -53,7 +64,7 @@ export default function CheckoutConfirm({order}:Props) {
           </Grid>
   
           <Grid item xs={12} md={4}>
-            <CheckoutSummary subtotal={0} objectTotalOrder={objectTotalOrder} total={order.totalRent+ order.totalDeposit} discount={0} />
+            <CheckoutSummary subtotal={0} objectTotalOrder={objectTotalOrder} total={order?.totalRent!+ order?.totalDeposit!} discount={0} />
             <Button
               fullWidth
               size="large"
