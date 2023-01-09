@@ -1,18 +1,16 @@
 
 
-import React, { useMemo } from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 // @mui
 import { Grid, Card, Button, Typography, Stack, Box } from '@mui/material';
 import { _addressBooks } from 'src/_mock/arrays';
-import Iconify from 'src/components/iconify/Iconify';
 import CheckoutSummary from './CheckoutSummary';
-import { ICheckoutBillingAddress } from 'src/@types/product';
-import Label from 'src/components/label/Label';
 import { FetchOrderItem, OrderBook } from 'src/utils/types';
-
-import { fDate, fDateTime } from 'src/utils/formatTime';
-import { getOrderItem } from 'src/utils/axios';
+import { checkoutSuccess, getOrderItem } from 'src/utils/axios';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import { useSnackbar } from 'notistack';
 export type TypeTotal ={
     deposit : number;
     rent: number;
@@ -23,22 +21,22 @@ export type TypeTotal ={
   }
   
 export default function CheckoutConfirm({order}:Props) {
-   
+  const { enqueueSnackbar } = useSnackbar();
     const [open, setOpen] = useState(false);
     const [orderItemArr,setOrderItemArr] = useState<FetchOrderItem[]>([]);
     const [objectTotalOrder ,setObjectTotalOrder] = useState<TypeTotal>({"deposit": order?.totalDeposit!,"rent": order?.totalRent! ,"sum":0});
 
-    useMemo(()=>{
+    useEffect(()=>{
       const fetchData =async () => {
         try {
          const res = await getOrderItem(order.orderId);
          setOrderItemArr(res.data);
         } catch (err) {
-          
+          console.log(err);
         }
       }
       fetchData()
-    },[order])
+    },[order]);
  
 
     const handleOpen = () => {
@@ -48,17 +46,42 @@ export default function CheckoutConfirm({order}:Props) {
     const handleClose = () => {
       setOpen(false);
     };
-  
+    
+    async function handleClickCheckout(){
+      try {
+          if(order!= undefined){
+            setOpen(true);
+            if(order.user.virtualWallet < order?.totalRent!+ order?.totalDeposit!){
+              enqueueSnackbar('There is not enough money in the user\'s account!',{variant:'error'});
+              setOpen(false);
+              return;
+            }
+            await checkoutSuccess(order.orderId);
+            setOpen(false);
+          }
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
     return (
       <>
-        <Grid container spacing={3}>
+      {
+        open  ? 
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+          onClick={handleClose}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        : (
+          <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
-            
              {orderItemArr.filter(o=>o.order.orderId === order.orderId).map((data, index) => (
               <AddressItem
                 key={index}
                 data={data}
-              
               />
             ))} 
           </Grid>
@@ -70,11 +93,15 @@ export default function CheckoutConfirm({order}:Props) {
               size="large"
               type="submit"
               variant="contained"
+              onClick={handleClickCheckout}
               >
                 Checkout
             </Button>
           </Grid>
         </Grid>
+        )
+      }
+        
   
         {/* <CheckoutBillingNewAddressForm
           open={open}
@@ -120,8 +147,6 @@ type AddressItemProps = {
                   ({order.user.email})
                 </Box>
               </Typography>
-  
-             
             </Stack>
             <Typography variant="body2">Address: {order.user.address}</Typography>
             <Typography variant="body2">Title Book: {book.title}</Typography>

@@ -15,10 +15,12 @@ import {
   Stack,
   TableBody,
   Grid,
+  TableContainer,
 } from '@mui/material';
 import {
   useTable,
   TableHeadCustom,
+  TablePaginationCustom,
 } from '../../components/table';
 import { ListCategoryRow } from 'src/sections/@dashboard/category';
 import { createCategory, getCategorys, updateCategorys } from 'src/utils/axios';
@@ -32,6 +34,7 @@ const TABLE_HEAD = [
 export default function CategoryPage() {
 
   const {
+    dense,
     page,
     order,
     orderBy,
@@ -41,6 +44,9 @@ export default function CategoryPage() {
     onSelectRow,
     onSelectAllRows,
     //
+    onChangeDense,
+    onChangeRowsPerPage,
+    onChangePage,
     onSort,
   } = useTable({ defaultOrderBy: 'createDate' });
   const [tableData, setTableData] = useState<FetchCategory[]>([]);
@@ -160,7 +166,8 @@ const handleDeleteRow = (id: number) => {
               ]}
             />
             <Card>
-            <Scrollbar>
+            <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+              <Scrollbar>
                     <Table  sx={{ minWidth: 800 }}>
                         <TableHeadCustom
                         order={order}
@@ -184,10 +191,21 @@ const handleDeleteRow = (id: number) => {
                                 />
                                 ))}
 
-                           
+                            
                         </TableBody>
                     </Table>
                 </Scrollbar>
+            </TableContainer>
+            <TablePaginationCustom
+                count={tableData.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={onChangeRowsPerPage}
+                //
+                dense={dense}
+                onChangeDense={onChangeDense}
+            />
             </Card>
           </Grid>
          

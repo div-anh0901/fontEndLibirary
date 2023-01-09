@@ -12,7 +12,7 @@ const INPUT_WIDTH = 160;
 type Props = {
   filterTitle: string;
   isFiltered: boolean;
-  filterService: string;
+  filterCategory: string;
   optionsCategory: FetchCategory[];
   onResetFilter: VoidFunction;
   onFilterTitle: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,7 +23,7 @@ export default function BookTableToolbar({
   filterTitle,
   isFiltered,
   onFilterTitle,
-  filterService,
+  filterCategory,
   onResetFilter,
   optionsCategory,
   onFilterCategory,
@@ -42,7 +42,7 @@ export default function BookTableToolbar({
         fullWidth
         select
         label="category type"
-        value={filterService}
+        value={filterCategory}
         onChange={onFilterCategory}
         SelectProps={{
           MenuProps: {

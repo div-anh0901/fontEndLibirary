@@ -89,7 +89,8 @@ export default function BookListPage() {
     
       const [filterStatus, setFilterStatus] = useState('all');
     
-      const [filterService, setFilterService] = useState('all');
+      const [filterCategory, setFilterCategory] = useState('');
+      
     
       const [filterEndDate, setFilterEndDate] = useState<Date | null>(null);
     
@@ -99,6 +100,7 @@ export default function BookListPage() {
 
       const dataFiltered = applyFilter({
         inputData: tableData,
+        filterCategory,
         comparator: getComparator(order, orderBy),
         filterTitle
       });
@@ -130,7 +132,6 @@ export default function BookListPage() {
     const getLengthByStatus = (status: string) =>
       tableData.filter((item) => item.status === status).length;
 
-      
     const handleOpenConfirm = () => {
         setOpenConfirm(true);
     };
@@ -162,11 +163,11 @@ export default function BookListPage() {
       const handleResetFilter = () => {
         setFilterTitle('');
         setFilterStatus('all');
-        setFilterService('all');
+        setFilterCategory('');
       };
       const handleFilterService = (event: React.ChangeEvent<HTMLInputElement>) => {
         setPage(0);
-        setFilterService(event.target.value);
+        setFilterCategory(event.target.value);
       };
   return (
     <>
@@ -200,7 +201,7 @@ export default function BookListPage() {
             <BookTableToolbar
             isFiltered={isFiltered}
             filterTitle={filterTitle}
-            filterService={filterService}
+            filterCategory={filterCategory}
          
             onFilterTitle={handleFilterTitle}
             optionsCategory={categoriesOption}
@@ -248,24 +249,21 @@ export default function BookListPage() {
                     </Stack>
                 }
                 />
-
-
-
                 <Scrollbar>
                     <Table size={dense ? 'small' : 'medium'} sx={{ minWidth: 800 }}>
-                        <TableHeadCustom
-                        order={order}
-                        orderBy={orderBy}
-                        headLabel={TABLE_HEAD}
-                        rowCount={tableData.length}
-                        numSelected={selected.length}
-                        onSort={onSort}
-                        onSelectAllRows={(checked) =>
-                            onSelectAllRows(
-                            checked,
-                            tableData.map((row) => row.id)
-                            )
-                        }
+                      <TableHeadCustom
+                          order={order}
+                          orderBy={orderBy}
+                          headLabel={TABLE_HEAD}
+                          rowCount={tableData.length}
+                          numSelected={selected.length}
+                          onSort={onSort}
+                          onSelectAllRows={(checked) =>
+                              onSelectAllRows(
+                              checked,
+                              tableData.map((row) => row.id)
+                              )
+                          }
                         />
                          <TableBody>
                             {dataFiltered
@@ -333,15 +331,16 @@ export default function BookListPage() {
 
 function applyFilter({
     inputData,
+    filterCategory,
     comparator,
     filterTitle,
   }: {
     inputData: FetchBooks[];
+    filterCategory: string;
     comparator: (a: any, b: any) => number;
     filterTitle: string;
   }) {
 
-    console.log(filterTitle)
     const stabilizedThis = inputData.map((el, index) => [el, index] as const);
     inputData = stabilizedThis.map((el) => el[0]);
     if (filterTitle) {
@@ -349,6 +348,9 @@ function applyFilter({
         (book) =>
         book.title.toLowerCase().indexOf(filterTitle.toLowerCase()) !== -1
       );
+    }
+    if(filterCategory.length >0){
+      inputData = inputData.filter(book=> book.category.name.toLowerCase().indexOf(filterCategory.toLowerCase())>=0)
     }
    
     return inputData;

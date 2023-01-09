@@ -64,7 +64,7 @@ export default function AccountPage() {
       value: 'brrowBook',
       label: 'BrrowBook',
       icon: <Iconify icon="ic:round-receipt" />,
-      component: orderUpdate ? <CheckoutConfirm order={orderAVAILABLE!} /> :<BorrowBook setOrderUpdate={setOrderUpdate} setShowFormConfirm={setShowFormConfirm} />,
+      component: orderUpdate ? <CheckoutConfirm order={orderUpdate} /> :<BorrowBook setOrderUpdate={setOrderUpdate} setShowFormConfirm={setShowFormConfirm} />,
     },
   ];
   return (

@@ -393,6 +393,8 @@ function applyFilter({
   if (filterRole.id !== 0) {
     inputData = inputData.filter((user) => user.roles.find((role) =>role.id === filterRole.id));
   }
+
+  
  
 
   return inputData;

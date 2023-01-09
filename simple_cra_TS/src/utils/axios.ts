@@ -26,7 +26,7 @@ export const updateUserMoneyAPI = (data: User) =>  axiosInstance.put('/api/user/
 export const listOrders = ()=>  axiosInstance.get<OrderBook[]>('/api/orders',config)
 export const createOrder = (data: CreateOrder)=> axiosInstance.post('/api/orders/add?userId=' + data.userId,data,config);
 export const updateOrder = (data: OrderBook)=>axiosInstance.put('/api/orders/save?orderID=' + data.orderId,data,config);
-
+export const checkoutSuccess = (data: string) => axiosInstance.get('/api/orders/checkout-buying-success?orderID=' + data,config);
 //order item
 export const createOrderItem = (data: addOrderItem)=>axiosInstance.post('/api/order_items/add?orderId='+data.order.orderId.toString()+ "&bookId="+data.bookId,{
     quantity: data.quantity,

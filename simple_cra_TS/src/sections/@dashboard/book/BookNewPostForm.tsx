@@ -47,7 +47,8 @@ export default function BookNewPostForm() {
     const categories =  useSelector(state =>state.categories.categories);
   
     const [openPreview, setOpenPreview] = useState(false);
-  
+    const [category,setCategory] = useState(1)
+
     const NewBlogSchema = Yup.object().shape({
       title: Yup.string().required('Title is required'),
      
@@ -102,7 +103,9 @@ export default function BookNewPostForm() {
     const handleCategoryId = (id: number)=>{
       setValue('categoryId', id);
     }
-
+    const handleFilterService = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setCategory(parseInt(event.target.value));
+    };
 
   return (
     <>
@@ -148,6 +151,8 @@ export default function BookNewPostForm() {
                 size="small"
                 label="Category"
                 InputLabelProps={{ shrink: true }}
+                value={category}
+                onChange={handleFilterService}
                 SelectProps={{
                   native: false,
                   MenuProps: {
@@ -159,26 +164,10 @@ export default function BookNewPostForm() {
                 }}
                 fullWidth
               >
-                <MenuItem
-                  value=""
-                  
-                  sx={{
-                    mx: 1,
-                    borderRadius: 0.75,
-                    typography: 'body2',
-                    fontStyle: 'italic',
-                    color: 'text.secondary',
-                  }}
-                >
-                  None
-                </MenuItem>
-
-                <Divider />
-
                 {categories.map((option) => (
                   <MenuItem
                     key={option.categoryId}
-                    value={option.name}
+                    value={option.categoryId}
                     sx={{
                       mx: 1,
                       my: 0.5,

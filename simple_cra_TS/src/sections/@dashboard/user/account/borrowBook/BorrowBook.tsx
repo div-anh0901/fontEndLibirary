@@ -48,14 +48,14 @@ export default function BorrowBook({setShowFormConfirm,setOrderUpdate}:Props) {
         }
         setObjectTotalOrder(objectTotalOrder);
         setTotalOrder(totalCount);
-        setShowFormOrder(true)
+        setShowFormOrder(true);
       }
     },[orderStore]);
 
     async  function handleCreateOrder (){
       try {
         if(user!= undefined){
-          setIsSupmmiting(true)
+          setIsSupmmiting(true);
           dispatch(createOrderThunk(
             {
               userId: user?.id,
@@ -67,7 +67,7 @@ export default function BorrowBook({setShowFormConfirm,setOrderUpdate}:Props) {
               totalRent: null
             }))
             setIsSupmmiting(false);
-            setShowFormBook(true)
+            setShowFormBook(true);
         }
             
       } catch (err) {
@@ -82,7 +82,6 @@ export default function BorrowBook({setShowFormConfirm,setOrderUpdate}:Props) {
       dispatch(deleteOrderItemStore(orderitem))
       setObjectTotalOrder({"deposit": 0,"rent": 0 ,"sum":0})
     }
-
 
     const onIncreaseQuantity = (orderitem: addOrderItem)=>{
       dispatch(onIncreaseQty(orderitem));
@@ -106,10 +105,10 @@ export default function BorrowBook({setShowFormConfirm,setOrderUpdate}:Props) {
                 orderId: order?.orderId,
                 fullName: order?.fullName,
                 email:  order?.email,
+                type: "VIRTUAL_WALLET",
                 status: "AVAILABLE",
                 phoneNumber: order?.phoneNumber,
                 address: order?.address,
-              
                 totalDeposit: objectTotalOrder.deposit,
                 totalRent: objectTotalOrder.rent,
                 user: order.user

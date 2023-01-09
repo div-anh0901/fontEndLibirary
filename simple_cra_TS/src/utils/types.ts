@@ -88,6 +88,7 @@ export type FetchBooks = {
 
 export type OrderBook ={
     orderId: string;
+    type: string |null;
     fullName: string;
     email: string;
     phoneNumber: string;
