@@ -13,6 +13,8 @@ import CartBookRow from './CartBookRow';
 const TABLE_HEAD = [
     { id: 'invoiceNumber', label: 'Client', align: 'left' },
     { id: 'title', label: 'Title', align: 'left' },
+    { id: 'price', label: 'Price', align: 'left' },
+    { id: 'borrow', label: 'Borrow', align: 'left' },
     { id: 'quantity', label: 'Quantity', align: 'left' },
     { id: 'status', label: 'Status', align: 'left' },
     { id: '' },

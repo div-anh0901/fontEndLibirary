@@ -24,8 +24,6 @@ const navConfig = [
     subheader: 'general',
     items: [
       { title: 'App', path: PATH_DASHBOARD.one, icon: ICONS.dashboard },
-      { title: 'Two', path: PATH_DASHBOARD.two, icon: ICONS.ecommerce },
-      { title: 'Three', path: PATH_DASHBOARD.three, icon: ICONS.analytics },
     ],
   },
 
@@ -40,8 +38,6 @@ const navConfig = [
         children: [
           { title: 'List', path: PATH_DASHBOARD.user.list },
           { title: 'New Account', path: PATH_DASHBOARD.user.newAccount },
-          { title: 'Five', path: PATH_DASHBOARD.user.five },
-          { title: 'Six', path: PATH_DASHBOARD.user.six },
         ],
       },
       {

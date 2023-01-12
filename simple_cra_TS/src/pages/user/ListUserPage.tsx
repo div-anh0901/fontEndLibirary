@@ -1,5 +1,5 @@
 
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState,useCallback } from 'react'
 import { Helmet } from 'react-helmet-async';
 import { IUserAccountGeneral } from 'src/@types/user';
 import { useSettingsContext } from 'src/components/settings';
@@ -23,14 +23,16 @@ import {
   Container,
   IconButton,
   TableContainer,
+  Grid,
 } from '@mui/material';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { UserTableRow, UserTableToolbar } from 'src/sections/@dashboard/user/list';
-import { useDispatch, useSelector } from 'src/redux/store';
+import { RootState, useDispatch,useSelector } from 'src/redux/store';
 import { useAuthContext } from 'src/auth/useAuthContext';
 import { Role, User } from 'src/utils/types';
 import { AddToRoleDialog } from 'src/components/dialog';
 import LoadMoneyDialog from 'src/components/dialog/LoadMoneyDialog';
+import { fetchUserThunk, getAllUser } from 'src/redux/slices/user';
 const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
 const ROLE_OPTIONS = [
@@ -66,10 +68,7 @@ const TABLE_HEAD = [
 export default function ListUserPage() {
   const dispatch = useDispatch();
   const {user} = useAuthContext();
-
-  var users = useSelector(state=> state.users.users.filter(u => u.id !== user?.id));
- 
-
+  const [listUser,setListUser] = useState<User[]>(useSelector(state=> state.users.users.filter(u => u.id !== user?.id)))
   const {
     dense,
     page,
@@ -96,7 +95,7 @@ export default function ListUserPage() {
 
   const navigate = useNavigate();
 
-  const [tableData, setTableData] = useState<User[]>(users);
+  const [tableData, setTableData] = useState<User[]>(listUser);
 
   const [filterName, setFilterName] = useState('');
 
@@ -213,6 +212,11 @@ export default function ListUserPage() {
     setFilterRole({id: 0,name:'all'});
     setFilterStatus('all');
   };
+
+  const handleReload = ()=>{
+    window.location.reload();
+  }
+
   return (
     <>
     <Helmet>
@@ -228,14 +232,23 @@ export default function ListUserPage() {
           { name: 'List' },
         ]}
         action={
-          <Button
-            to={PATH_DASHBOARD.user.newAccount}
-            component={RouterLink}
-            variant="contained"
-            startIcon={<Iconify icon="eva:plus-fill" />}
-          >
-            New User
-          </Button>
+          <Grid container spacing={3}>
+              <Button
+                style={{"marginRight": "10px" }}
+                variant="contained"
+                onClick={handleReload}
+                >
+                  Reload
+            </Button>
+            <Button
+                to={PATH_DASHBOARD.user.newAccount}
+                component={RouterLink}
+                variant="contained"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+                >
+              New User
+            </Button>
+          </Grid>
         }
       />
 

@@ -44,7 +44,7 @@ export default function CartBookRow({
   selected,
   onSelectRow,
 }: Props) {
-  const { id, title, createdAt, author, status,price,amount } = row;
+  const { id, title, createdAt, author, status,price,amount ,borrowPrice} = row;
   const [value, setValue] = useState<Date|null>(new Date());
   const [openConfirm, setOpenConfirm] = useState(false);
   const [openPopover, setOpenPopover] = useState<HTMLElement | null>(null);
@@ -87,6 +87,8 @@ export default function CartBookRow({
         </TableCell>
 
         <TableCell align="left">{title}</TableCell>
+        <TableCell align="left">{borrowPrice}</TableCell>
+        <TableCell align="left">{price}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
           {amount}

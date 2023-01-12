@@ -14,6 +14,7 @@ import { fetchBookThunk } from './redux/slices/book';
 import { fetchCategoriesThunk } from './redux/slices/category';
 import { fetchUserThunk } from './redux/slices/user';
 import { fetchOrderBookThunk } from './redux/slices/order';
+import { FetchOrderItemThunk } from './redux/slices/orderItem';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,7 @@ export default function App() {
     dispatch(fetchCategoriesThunk());
     dispatch(fetchUserThunk());
     dispatch(fetchOrderBookThunk());
+    dispatch(FetchOrderItemThunk())
   }
 
   return (

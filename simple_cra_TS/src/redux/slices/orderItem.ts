@@ -1,14 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createOrderItem as createOrderItemAPI, getOrderItem as getOrderItemAPI } from "src/utils/axios";
+import { createOrderItem as createOrderItemAPI, getAllOrderItem as getAllOrderItemAPI} from "src/utils/axios";
 import { addOrderItem, FetchBooks, FetchOrderItem, OrderBook } from "src/utils/types";
 
 export interface addOrdersState {
-    orderItem: FetchOrderItem[]
+    orderItems: FetchOrderItem[]
 }
 
 
 const initialState: addOrdersState = {
-    orderItem: [ ]
+    orderItems: [ ]
 }
 
 export const  CreateOrderItemThunk = createAsyncThunk(
@@ -19,9 +19,9 @@ export const  CreateOrderItemThunk = createAsyncThunk(
 )
 
 export const FetchOrderItemThunk = createAsyncThunk(
-    'fetch/order_item',
-    async (orderId: string)=>{
-        return getOrderItemAPI(orderId);
+    'fetch_all/order_items',
+    async ()=>{
+        return getAllOrderItemAPI()
     }
 )
 
@@ -35,10 +35,10 @@ export const orderItemSlice = createSlice({
     },extraReducers(builder) {
         builder
             .addCase(FetchOrderItemThunk.fulfilled,(state,action)=>{
-                state.orderItem = action.payload.data;
+                state.orderItems = action.payload.data;
             })
             .addCase(CreateOrderItemThunk.fulfilled, (state,action)=>{
-                state.orderItem.push(action.payload.data);
+              
             })
     },
 });

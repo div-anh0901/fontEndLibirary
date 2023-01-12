@@ -25,6 +25,7 @@ import {
     Container,
     IconButton,
     TableContainer,
+    Grid,
   } from '@mui/material';
 // components
 import ConfirmDialog from '../../components/confirm-dialog';
@@ -169,6 +170,9 @@ export default function BookListPage() {
         setPage(0);
         setFilterCategory(event.target.value);
       };
+      const handleReload  = ()=>{
+        window.location.reload();
+      }
   return (
     <>
       <Helmet>
@@ -187,14 +191,23 @@ export default function BookListPage() {
             },
           ]}
           action={
+            <Grid container spacing={3}>
+              <Button
+                style={{"marginRight": "10px" }}
+                variant="contained"
+                onClick={handleReload}
+                >
+                  Reload
+            </Button>
             <Button
-              to={PATH_DASHBOARD.book.post}
-              component={RouterLink}
-              variant="contained"
-              startIcon={<Iconify icon="eva:plus-fill" />}
-            >
+                to={PATH_DASHBOARD.user.newAccount}
+                component={RouterLink}
+                variant="contained"
+                startIcon={<Iconify icon="eva:plus-fill" />}
+                >
               New Book
             </Button>
+          </Grid>
           }
         />
         <Card>
@@ -202,7 +215,6 @@ export default function BookListPage() {
             isFiltered={isFiltered}
             filterTitle={filterTitle}
             filterCategory={filterCategory}
-         
             onFilterTitle={handleFilterTitle}
             optionsCategory={categoriesOption}
             onResetFilter={handleResetFilter}

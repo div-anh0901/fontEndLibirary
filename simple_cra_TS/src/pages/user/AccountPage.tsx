@@ -24,7 +24,7 @@ export default function AccountPage() {
   const [showFormConfirm,setShowFormConfirm] = useState(false);
   
   const orderAVAILABLE = useSelector((state)=> state.orderBook.orderBooks.find((or=> or.user.email === email && or.status === "AVAILABLE")));
-  const [ orderUpdate,setOrderUpdate] = useState<OrderBook>()
+  const [ orderUpdate,setOrderUpdate] = useState<OrderBook| undefined>(undefined)
   const [currentTab, setCurrentTab] = useState('general');
 
 
@@ -54,17 +54,17 @@ export default function AccountPage() {
         />
       ),
     },
-    {
-      value: 'notifications',
-      label: 'Notifications',
-      icon: <Iconify icon="eva:bell-fill" />,
-      component: <AccountNotifications/>,
-    },
+    // {
+    //   value: 'notifications',
+    //   label: 'Notifications',
+    //   icon: <Iconify icon="eva:bell-fill" />,
+    //   component: <AccountNotifications/>,
+    // },
     {
       value: 'brrowBook',
       label: 'BrrowBook',
       icon: <Iconify icon="ic:round-receipt" />,
-      component: orderUpdate ? <CheckoutConfirm order={orderUpdate} /> :<BorrowBook setOrderUpdate={setOrderUpdate} setShowFormConfirm={setShowFormConfirm} />,
+      component: orderUpdate ? <CheckoutConfirm order={orderUpdate}  setOrderUpdate={setOrderUpdate}/> :<BorrowBook setOrderUpdate={setOrderUpdate} setShowFormConfirm={setShowFormConfirm} />,
     },
   ];
   return (

@@ -34,8 +34,8 @@ export const createOrderItem = (data: addOrderItem)=>axiosInstance.post('/api/or
     returnedAt: data.returnedAt
 },config);
 export const getOrderItem =(orderId: string)=> axiosInstance.get<FetchOrderItem[]>('/api/order_items/order?orderID=' +orderId ,config);
-
-
+export const  deleteOrderItem = (id: number)=> axiosInstance.delete<FetchOrderItem[]>('/api/order_items/delete/' +id ,config);
+export const getAllOrderItem = ()=>axiosInstance.get<FetchOrderItem[]>('/api/order_items' ,config);
 //Book 
 export const createBook = (data: CreateBook)=> axiosInstance.post('/api/books/add?categoryId='+data.categoryId,data);
 export const  listBooks = ()=> axiosInstance.get<FetchBooks[]>('/api/books',config);
