@@ -92,11 +92,27 @@ export type OrderBook ={
     fullName: string;
     email: string;
     phoneNumber: string;
+    createdAt?: string;
+    updatedAt?: string;
     address: string;
     status: string;
     totalDeposit: number;
     totalRent: number;
     user: User;
+}
+
+export type OrderBook_V1 ={
+    orderId: string;
+    type: string |null;
+    fullName?: string;
+    email?: string;
+    phoneNumber?: string;
+    address?: string;
+    status?: string;
+    totalDeposit?: number;
+    totalRent?: number;
+    user?: User;
+    books: FetchOrderItem[];
 }
 
 export  type CreateOrder ={
@@ -118,8 +134,21 @@ export type addOrderItem ={
     returnedAt: string;
 }
 
+export type AddOrderItem_V1 ={
+    title: string; 
+    borrowPrice: number, 
+    quantity: number, 
+    price: number,
+    total: number,
+    status:  string,
+    borrowedAt:  string, 
+    returnedAt: string,
+    bookId: number;
+}
+
 export type FetchOrderItem ={
     orderItemId: number;
+    status: string;
     quantity: number;
     book: FetchBooks;
     borrowedAt: string;
@@ -127,4 +156,10 @@ export type FetchOrderItem ={
     order:OrderBook
 }
 
+
+export type ReportOrderbyUserIdType ={
+    month:number;
+    totalDeposit: number;
+    totalRent: number;
+}
 

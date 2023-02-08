@@ -182,7 +182,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
 
   const resetPassword =  async (email:String)=>{
-     await axios.post('/api/user/resetPassword', { email });
+     await axios.post('/api/user/resetPassword?clientLink=http://localhost:3000', { email });
   }
   const newPassword = async(password: string,token: string)=>{
     await axios.post('/api/user/savePassword?token='+token , { newPassword :password });

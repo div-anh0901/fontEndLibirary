@@ -26,6 +26,7 @@ export default function AccountPage() {
   const orderAVAILABLE = useSelector((state)=> state.orderBook.orderBooks.find((or=> or.user.email === email && or.status === "AVAILABLE")));
   const [ orderUpdate,setOrderUpdate] = useState<OrderBook| undefined>(undefined)
   const [currentTab, setCurrentTab] = useState('general');
+  const orderItems= useSelector((state)=> state.orderItem.orderItems.filter(ot => ot.order.user.email === email && ot.status !== "PENDING"));
 
 
   useMemo(()=>{
@@ -33,7 +34,7 @@ export default function AccountPage() {
       setOrderUpdate(orderAVAILABLE)
       setShowFormConfirm(true)
     }
-  },[orderAVAILABLE])
+  },[orderAVAILABLE]);
 
   const TABS = [
     {
@@ -49,17 +50,12 @@ export default function AccountPage() {
       component: (
         <AccountBilling
           cards={_userPayment}
-          addressBook={_userAddressBook}
+          orderItems={orderItems}
           invoices={_userInvoices}
         />
       ),
     },
-    // {
-    //   value: 'notifications',
-    //   label: 'Notifications',
-    //   icon: <Iconify icon="eva:bell-fill" />,
-    //   component: <AccountNotifications/>,
-    // },
+
     {
       value: 'brrowBook',
       label: 'BrrowBook',

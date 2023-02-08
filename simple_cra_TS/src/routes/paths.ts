@@ -42,6 +42,12 @@ export const PATH_DASHBOARD = {
     edit: (id: number) => path(ROOTS_DASHBOARD, `/book/edit/${id}`),
     view: (id: number) => path(ROOTS_DASHBOARD, `/book/view/${id}`),
   },
+  order:{
+    list: path(ROOTS_DASHBOARD, '/order/lists'),
+    root: path(ROOTS_DASHBOARD, '/order'),
+    newOrder:  path(ROOTS_DASHBOARD, '/order/new'),
+    view: (id: string) => path(ROOTS_DASHBOARD, `/order/view/${id}`),
+  },
   category:{
     list: path(ROOTS_DASHBOARD, '/category'),
   }

@@ -41,21 +41,19 @@ const navConfig = [
         ],
       },
       {
-        title: 'blog',
-        path: PATH_DASHBOARD.blog.root,
-        icon: ICONS.blog,
-        children: [
-          { title: 'posts', path: PATH_DASHBOARD.blog.posts },
-          { title: 'post', path: PATH_DASHBOARD.blog.demoView },
-          { title: 'create', path: PATH_DASHBOARD.blog.new },
-        ],
-      },
-      {
         title: 'book',
         path: PATH_DASHBOARD.book.list,
         children: [
           { title: 'lists', path: PATH_DASHBOARD.book.list },
           { title: 'create', path: PATH_DASHBOARD.book.post },
+        ],
+      },
+      {
+        title: 'order',
+        path: PATH_DASHBOARD.order.root,
+        children: [
+          { title: 'List', path: PATH_DASHBOARD.order.list },
+          { title: 'New Order', path: PATH_DASHBOARD.order.newOrder },
         ],
       },
       {

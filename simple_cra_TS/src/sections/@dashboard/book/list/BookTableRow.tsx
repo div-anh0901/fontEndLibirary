@@ -23,11 +23,12 @@ import Iconify from '../../../../components/iconify';
 import { CustomAvatar } from '../../../../components/custom-avatar';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import { FetchBooks } from 'src/utils/types';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IInvoice;
+  row: FetchBooks;
   selected: boolean;
   onSelectRow: VoidFunction;
   onViewRow: VoidFunction;
@@ -35,7 +36,7 @@ type Props = {
   onDeleteRow: VoidFunction;
 };
 
-export default function InvoiceTableRow({
+export default function BookTableRow({
   row,
   selected,
   onSelectRow,
@@ -43,7 +44,7 @@ export default function InvoiceTableRow({
   onEditRow,
   onDeleteRow,
 }: Props) {
-  const { sent, invoiceNumber, createDate, dueDate, status, invoiceTo, totalPrice } = row;
+  const { id, title, createdAt, author, status,price } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -74,34 +75,25 @@ export default function InvoiceTableRow({
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <CustomAvatar name={invoiceTo.name} />
-
             <div>
               <Typography variant="subtitle2" noWrap>
-                {invoiceTo.name}
+                {id}
               </Typography>
-
-              <Link
-                noWrap
-                variant="body2"
-                onClick={onViewRow}
-                sx={{ color: 'text.disabled', cursor: 'pointer' }}
-              >
-                {`INV-${invoiceNumber}`}
-              </Link>
             </div>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{fDate(createDate)}</TableCell>
-
-        <TableCell align="left">{fDate(dueDate)}</TableCell>
-
-        <TableCell align="center">{fCurrency(totalPrice)}</TableCell>
+        <TableCell align="left">{title}</TableCell>
 
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {sent}
+          {author}
         </TableCell>
+
+        <TableCell align="left">{fDate(createdAt)}</TableCell>
+
+        <TableCell align="center">{fCurrency(price)}</TableCell>
+
+        
 
         <TableCell align="left">
           <Label

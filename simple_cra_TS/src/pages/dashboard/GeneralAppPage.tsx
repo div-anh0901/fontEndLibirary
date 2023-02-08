@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Helmet } from 'react-helmet-async';
 //@MUI
 import { useTheme } from '@mui/material/styles';
@@ -14,9 +14,36 @@ import {
 } from '../../_mock/arrays';
 import { useSettingsContext } from 'src/components/settings';
 import { AppAreaInstalled, AppCurrentDownload, AppNewInvoice, AppWidgetSummary } from 'src/sections/@dashboard/general/app';
+import { useSelector } from 'src/redux/store';
 export default function GeneralAppPage() {
   const theme = useTheme();
   const { themeStretch } = useSettingsContext();
+
+  const userLenth = useSelector(state=> state.users.users);
+  const orderLenth = useSelector(state=> state.orderBook.orderBooks);
+  const  bookLenth = useSelector(state=> state.books.books);
+  const [chart_v1, setChart_v1] = useState({"PENDING" : 0, "AVAILABLE": 0,  "ALL":orderLenth.length, "PROCESSING" : 0, "COMPLETED" : 0});
+  
+
+  useMemo(()=>{
+    for(var i = 0  ; i < orderLenth.length; i++){
+      switch(orderLenth[i].status){
+        case "PENDING" : 
+          chart_v1.PENDING += 1;
+          break;
+        case "AVAILABLE" : 
+          chart_v1.AVAILABLE += 1;
+          break;
+        case "PROCESSING" : 
+          chart_v1.PROCESSING += 1;
+          break;
+        case "COMPLETED" : 
+          chart_v1.COMPLETED += 1;
+          break;
+        }
+    }
+  },[]);
+
   return (
     <>
       <Helmet>
@@ -26,9 +53,9 @@ export default function GeneralAppPage() {
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
               <AppWidgetSummary
-                title="Total Active Users"
+                title="Total Users"
                 percent={2.6}
-                total={18765}
+                total={userLenth.length}
                 chart={{
                   colors: [theme.palette.primary.main],
                   series: [5, 18, 12, 51, 68, 11, 39, 37, 27, 20],
@@ -38,9 +65,9 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={4}>
             <AppWidgetSummary
-              title="Total Installed"
+              title="Total Order"
               percent={0.2}
-              total={4876}
+              total={orderLenth.length}
               chart={{
                 colors: [theme.palette.info.main],
                 series: [20, 41, 63, 33, 28, 35, 50, 46, 11, 26],
@@ -50,9 +77,9 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={4}>
             <AppWidgetSummary
-              title="Total Downloads"
+              title="Total Books"
               percent={-0.1}
-              total={678}
+              total={bookLenth.length}
               chart={{
                 colors: [theme.palette.warning.main],
                 series: [8, 9, 31, 8, 16, 37, 8, 33, 46, 31],
@@ -62,7 +89,7 @@ export default function GeneralAppPage() {
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentDownload
-              title="Current Download"
+              title="Order"
               chart={{
                 colors: [
                   theme.palette.primary.main,
@@ -71,10 +98,10 @@ export default function GeneralAppPage() {
                   theme.palette.warning.main,
                 ],
                 series: [
-                  { label: 'Mac', value: 12244 },
-                  { label: 'Window', value: 53345 },
-                  { label: 'iOS', value: 44313 },
-                  { label: 'Android', value: 78343 },
+                  { label: 'Pending', value: chart_v1.PENDING },
+                  { label: 'Completed', value: chart_v1.COMPLETED },
+                  { label: 'Processing', value: chart_v1.PROCESSING },
+                  { label: 'Available', value: chart_v1.AVAILABLE },
                 ],
               }}
             />

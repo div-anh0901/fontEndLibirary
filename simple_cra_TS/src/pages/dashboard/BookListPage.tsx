@@ -49,6 +49,7 @@ import { dispatch, useDispatch, useSelector } from 'src/redux/store';
 import { fetchBookThunk } from 'src/redux/slices/book';
 import { FetchBooks } from 'src/utils/types';
 import { BookTableToolbar } from 'src/sections/@dashboard/book/list';
+import BookTableRow from 'src/sections/@dashboard/book/list/BookTableRow';
   const TABLE_HEAD = [
     { id: 'invoiceNumber', label: 'Client', align: 'left' },
     { id: 'title', label: 'Title', align: 'left' },
@@ -281,7 +282,7 @@ export default function BookListPage() {
                             {dataFiltered
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => (
-                                <InvoiceTableRow
+                                <BookTableRow
                                     key={row.id}
                                     row={row}
                                     selected={selected.includes(row.id)}

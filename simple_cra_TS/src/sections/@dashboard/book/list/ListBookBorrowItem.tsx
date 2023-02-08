@@ -2,7 +2,7 @@ import { Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableR
 import React,{useState} from 'react'
 import { useParams } from 'react-router';
 import Scrollbar from 'src/components/scrollbar/Scrollbar'
-import { TableEmptyRows, TableHeadCustom, TablePaginationCustom, useTable } from 'src/components/table';
+import { TableEmptyRows, TableHeadCustom, TablePaginationCustom, useTable,emptyRows } from 'src/components/table';
 import { useSelector } from 'src/redux/store';
 import { FetchOrderItem } from 'src/utils/types';
 import ListBorrowBookRow from './ListBorrowBookRow';
@@ -18,8 +18,8 @@ const TABLE_HEAD = [
   ];
 export default function ListBookBorrowItem() {
     const {id} = useParams();
-    const orderItemData =  useSelector(state=> state.orderItem.orderItems.filter(ot => parseInt(ot.book.id) === parseInt(id!)));
-    const [tableData, setTableData] = useState<FetchOrderItem[]>(orderItemData);
+    const orderItemData = useSelector(state=> state.orderItem.orderItems.filter((otiem) => parseInt(otiem.book.id) === parseInt(id!)));
+
     const {
         dense,
         page,
@@ -38,6 +38,8 @@ export default function ListBookBorrowItem() {
         onChangePage,
         onChangeRowsPerPage,
       } = useTable();
+
+      const denseHeight = dense ? 56 : 76;
   return (
     <>
         <TableContainer sx={{ overflow: 'unset' }}>
@@ -47,33 +49,40 @@ export default function ListBookBorrowItem() {
                             order={order}
                             orderBy={orderBy}
                             headLabel={TABLE_HEAD}
-                            rowCount={tableData.length}
+                            rowCount={orderItemData.length}
                             numSelected={selected.length}
                             onSort={onSort}
                             onSelectAllRows={(checked) =>
-                            onSelectAllRows(
-                                checked,
-                                tableData.map((row) => row.order.orderId)
-                            )
+                                onSelectAllRows(
+                                    checked,
+                                    orderItemData.map((row) => row.orderItemId+"")
+                                )
                             }
                          />
                         <TableBody>
-                            {tableData
-                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                            .map((row) => (
+                            {orderItemData
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row) => (
                                 <ListBorrowBookRow
-                                    key={row.orderItemId}
+                                    key={row.order.orderId}
                                     row={row}
-                                    selected={selected.includes(row.order.orderId)}
-                                    onSelectRow={() => onSelectRow(row.order.orderId)}
+                                    selected={selected.includes(row.orderItemId+"")}
+                                    onSelectRow={() => onSelectRow(row.orderItemId+"")}
                                 />
-                            ))}
+                                ))}
+
+                            <TableEmptyRows
+                                height={denseHeight}
+                                emptyRows={emptyRows(page, rowsPerPage, orderItemData.length)}
+                            />
+
+                            {/* <TableNoData isNotFound={isNotFound} /> */}
                         </TableBody>
                 </Table>
             </Scrollbar>
         </TableContainer>
         <TablePaginationCustom
-          count={tableData.length}
+          count={orderItemData.length}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={onChangePage}

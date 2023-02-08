@@ -11,6 +11,7 @@ import {
   TableCell,
   IconButton,
   Typography,
+  Avatar,
 } from '@mui/material';
 // utils
 import { fDate } from '../../../../utils/formatTime';
@@ -23,27 +24,24 @@ import Iconify from '../../../../components/iconify';
 import { CustomAvatar } from '../../../../components/custom-avatar';
 import MenuPopover from '../../../../components/menu-popover';
 import ConfirmDialog from '../../../../components/confirm-dialog';
+import { OrderBook } from 'src/utils/types';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IInvoice;
+  row: OrderBook;
   selected: boolean;
   onSelectRow: VoidFunction;
   onViewRow: VoidFunction;
-  onEditRow: VoidFunction;
-  onDeleteRow: VoidFunction;
 };
 
-export default function InvoiceTableRow({
+export default function OrderTableRow({
   row,
   selected,
   onSelectRow,
   onViewRow,
-  onEditRow,
-  onDeleteRow,
 }: Props) {
-  const { sent, invoiceNumber, createDate, dueDate, status, invoiceTo, totalPrice } = row;
+  const {  phoneNumber, createdAt, updatedAt, status, user, totalDeposit,totalRent } = row;
 
   const [openConfirm, setOpenConfirm] = useState(false);
 
@@ -74,34 +72,24 @@ export default function InvoiceTableRow({
 
         <TableCell>
           <Stack direction="row" alignItems="center" spacing={2}>
-            <CustomAvatar name={invoiceTo.name} />
+            <Avatar alt={user.name} src={user.avatar} />
 
             <div>
               <Typography variant="subtitle2" noWrap>
-                {invoiceTo.name}
+                {user.username}
               </Typography>
-
-              <Link
-                noWrap
-                variant="body2"
-                onClick={onViewRow}
-                sx={{ color: 'text.disabled', cursor: 'pointer' }}
-              >
-                {`INV-${invoiceNumber}`}
-              </Link>
+              <Typography variant="subtitle2" noWrap>
+                {user.email}
+              </Typography>
             </div>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{fDate(createDate)}</TableCell>
+        <TableCell align="left">{fDate(createdAt!)}</TableCell>
 
-        <TableCell align="left">{fDate(dueDate)}</TableCell>
+        <TableCell align="left">{fDate(updatedAt!)}</TableCell>
 
-        <TableCell align="center">{fCurrency(totalPrice)}</TableCell>
-
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {sent}
-        </TableCell>
+        <TableCell align="center">{fCurrency(totalDeposit + totalRent)}</TableCell>
 
         <TableCell align="left">
           <Label
@@ -139,42 +127,7 @@ export default function InvoiceTableRow({
           <Iconify icon="eva:eye-fill" />
           View
         </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            handleClosePopover();
-          }}
-        >
-          <Iconify icon="eva:edit-fill" />
-          Edit
-        </MenuItem>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem
-          onClick={() => {
-            handleOpenConfirm();
-            handleClosePopover();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
-        </MenuItem>
       </MenuPopover>
-
-      <ConfirmDialog
-        open={openConfirm}
-        onClose={handleCloseConfirm}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
-          </Button>
-        }
-      />
     </>
   );
 }
