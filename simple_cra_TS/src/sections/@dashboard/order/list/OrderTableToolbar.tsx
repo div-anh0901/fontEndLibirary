@@ -45,43 +45,6 @@ export default function OrderTableToolbar({
       }}
       sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
-        fullWidth
-        select
-        label="Service type"
-        value={filterService}
-        onChange={onFilterService}
-        SelectProps={{
-          MenuProps: {
-            PaperProps: {
-              sx: { maxHeight: 220 },
-            },
-          },
-        }}
-        sx={{
-          maxWidth: { md: INPUT_WIDTH },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsService.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              my: 0.5,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-              '&:first-of-type': { mt: 0 },
-              '&:last-of-type': { mb: 0 },
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
-
       <DatePicker
         label="Start date"
         value={filterStartDate}

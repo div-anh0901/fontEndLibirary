@@ -10,6 +10,7 @@ export type User = {
     status:  string;
     virtualWallet: number;
     roles:Role[];
+    orders?: OrderBook_User[];
 }
 
 export type CreateUser ={
@@ -84,7 +85,19 @@ export type FetchBooks = {
         category: FetchCategory
   };
   
-
+  export type OrderBook_User ={
+    orderId: string;
+    type: string |null;
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    createdAt?: string;
+    updatedAt?: string;
+    address: string;
+    status: string;
+    totalDeposit: number;
+    totalRent: number;
+}
 
 export type OrderBook ={
     orderId: string;
@@ -163,3 +176,13 @@ export type ReportOrderbyUserIdType ={
     totalRent: number;
 }
 
+
+export type OrderUserMAX = {
+    email:  string;
+    avatar: string;
+    username: string;
+    totalOrder: number;
+    price: number;
+    brrowPrice: number;
+    depositPrice: number;
+}

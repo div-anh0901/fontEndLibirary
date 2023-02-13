@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { sentenceCase } from 'change-case';
 // @mui
 import {
@@ -24,6 +24,7 @@ import Iconify from '../../../../components/iconify';
 import Scrollbar from '../../../../components/scrollbar';
 import MenuPopover from '../../../../components/menu-popover';
 import { TableHeadCustom } from '../../../../components/table';
+import { OrderUserMAX } from 'src/utils/types';
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +38,7 @@ type RowProps = {
 interface Props extends CardProps {
   title?: string;
   subheader?: string;
-  tableData: RowProps[];
+  tableData: OrderUserMAX[];
   tableLabels: any;
 }
 
@@ -48,6 +49,12 @@ export default function AppNewInvoice({
   tableLabels,
   ...other
 }: Props) {
+
+  useMemo(()=>{
+    tableData = tableData.slice(0,5);
+  },[])
+
+
   return (
     <Card {...other}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
@@ -58,8 +65,8 @@ export default function AppNewInvoice({
             <TableHeadCustom headLabel={tableLabels} />
 
             <TableBody>
-              {tableData.map((row) => (
-                <AppNewInvoiceRow key={row.id} row={row} />
+              {tableData.map((row,index) => (
+                <AppNewInvoiceRow key={row.email} row={row} />
               ))}
             </TableBody>
           </Table>
@@ -84,7 +91,7 @@ export default function AppNewInvoice({
 // ----------------------------------------------------------------------
 
 type AppNewInvoiceRowProps = {
-  row: RowProps;
+  row: OrderUserMAX;
 };
 
 function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
@@ -100,44 +107,35 @@ function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
 
   const handleDownload = () => {
     handleClosePopover();
-    console.log('DOWNLOAD', row.id);
+    console.log('DOWNLOAD', row.email);
   };
 
   const handlePrint = () => {
     handleClosePopover();
-    console.log('PRINT', row.id);
+    console.log('PRINT', row.email);
   };
 
   const handleShare = () => {
     handleClosePopover();
-    console.log('SHARE', row.id);
+    console.log('SHARE', row.email);
   };
 
   const handleDelete = () => {
     handleClosePopover();
-    console.log('DELETE', row.id);
+    console.log('DELETE', row.email);
   };
 
   return (
     <>
       <TableRow>
-        <TableCell>{`INV-${row.id}`}</TableCell>
-
-        <TableCell>{row.category}</TableCell>
+        <TableCell>{row.email}</TableCell>
 
         <TableCell>{fCurrency(row.price)}</TableCell>
 
+        <TableCell>{fCurrency(row.depositPrice)}</TableCell>
+
         <TableCell>
-          <Label
-            variant="soft"
-            color={
-              (row.status === 'in_progress' && 'warning') ||
-              (row.status === 'out_of_date' && 'error') ||
-              'success'
-            }
-          >
-            {sentenceCase(row.status)}
-          </Label>
+        {fCurrency(row.brrowPrice)}
         </TableCell>
 
         <TableCell align="right">
@@ -153,27 +151,7 @@ function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
         arrow="right-top"
         sx={{ width: 160 }}
       >
-        <MenuItem onClick={handleDownload}>
-          <Iconify icon="eva:download-fill" />
-          Download
-        </MenuItem>
-
-        <MenuItem onClick={handlePrint}>
-          <Iconify icon="eva:printer-fill" />
-          Print
-        </MenuItem>
-
-        <MenuItem onClick={handleShare}>
-          <Iconify icon="eva:share-fill" />
-          Share
-        </MenuItem>
-
-        <Divider sx={{ borderStyle: 'dashed' }} />
-
-        <MenuItem onClick={handleDelete} sx={{ color: 'error.main' }}>
-          <Iconify icon="eva:trash-2-outline" />
-          Delete
-        </MenuItem>
+       
       </MenuPopover>
     </>
   );

@@ -15,18 +15,32 @@ import {
 import { useSettingsContext } from 'src/components/settings';
 import { AppAreaInstalled, AppCurrentDownload, AppNewInvoice, AppWidgetSummary } from 'src/sections/@dashboard/general/app';
 import { useSelector } from 'src/redux/store';
+import { OrderUserMAX } from 'src/utils/types';
 export default function GeneralAppPage() {
   const theme = useTheme();
   const { themeStretch } = useSettingsContext();
-
+  const [userOrderMax,setUserOrderMax] = useState<OrderUserMAX[]>([]);
+  const [objOrderById,setObjOrderById] = useState<any>({});
+  const [objUserById,setObjUserById] = useState<any>({});
   const userLenth = useSelector(state=> state.users.users);
   const orderLenth = useSelector(state=> state.orderBook.orderBooks);
   const  bookLenth = useSelector(state=> state.books.books);
   const [chart_v1, setChart_v1] = useState({"PENDING" : 0, "AVAILABLE": 0,  "ALL":orderLenth.length, "PROCESSING" : 0, "COMPLETED" : 0});
-  
 
   useMemo(()=>{
+
+    for(var  i =  0 ; i<userLenth.length;i++ ){
+      objUserById[userLenth[i].email+""] = {email:userLenth[i].email, avatar: userLenth[i].avatar,username:userLenth[i].avatar, price: 0 , brrowPrice: 0, totalOrder: 0,depositPrice:0 }
+    }
+
+
     for(var i = 0  ; i < orderLenth.length; i++){
+      if(objUserById[orderLenth[i].user.email+""] !== null ){
+        objUserById[orderLenth[i].user.email+""].price += (orderLenth[i].totalDeposit + orderLenth[i].totalRent);
+        objUserById[orderLenth[i].user.email+""].brrowPrice += orderLenth[i].totalRent;
+        objUserById[orderLenth[i].user.email+""].depositPrice += orderLenth[i].totalDeposit;
+        objUserById[orderLenth[i].user.email+""].totalOrder += 1;
+      } 
       switch(orderLenth[i].status){
         case "PENDING" : 
           chart_v1.PENDING += 1;
@@ -41,6 +55,24 @@ export default function GeneralAppPage() {
           chart_v1.COMPLETED += 1;
           break;
         }
+    }
+
+    for(var  key in objUserById){
+      userOrderMax.push(objUserById[key]);
+      
+    }
+
+
+    for (let i = 0; i < userOrderMax.length - 1; i++) {
+      let idmax = i;
+      for (let j = i + 1; j < userOrderMax.length; j++) {
+        if (userOrderMax[j].price > userOrderMax[idmax].price) idmax = j;
+      }
+  
+      // swap
+      let t = userOrderMax[i];
+      userOrderMax[i] = userOrderMax[idmax];
+      userOrderMax[idmax] = t;
     }
   },[]);
 
@@ -106,42 +138,15 @@ export default function GeneralAppPage() {
               }}
             />
           </Grid>
-
           <Grid item xs={12} md={6} lg={8}>
-            <AppAreaInstalled
-              title="Area Installed"
-              subheader="(+43%) than last year"
-              chart={{
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
-                series: [
-                  {
-                    year: '2019',
-                    data: [
-                      { name: 'Asia', data: [10, 41, 35, 51, 49, 62, 69, 91, 148] },
-                      { name: 'America', data: [10, 34, 13, 56, 77, 88, 99, 77, 45] },
-                    ],
-                  },
-                  {
-                    year: '2020',
-                    data: [
-                      { name: 'Asia', data: [148, 91, 69, 62, 49, 51, 35, 41, 10] },
-                      { name: 'America', data: [45, 77, 99, 88, 77, 56, 13, 34, 10] },
-                    ],
-                  },
-                ],
-              }}
-            />
-          </Grid>
-
-          <Grid item xs={12} lg={12}>
             <AppNewInvoice
-              title="New Invoice"
-              tableData={_appInvoices}
+              title="User Price  Max"
+              tableData={userOrderMax}
               tableLabels={[
                 { id: 'id', label: 'Invoice ID' },
-                { id: 'category', label: 'Category' },
                 { id: 'price', label: 'Price' },
-                { id: 'status', label: 'Status' },
+                { id: 'deposit', label: 'Deposit' },
+                { id: 'borrowPrice', label: 'Borrow' },
                 { id: '' },
               ]}
             />

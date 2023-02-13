@@ -47,7 +47,7 @@ export default function BookNewPostForm() {
     const categories =  useSelector(state =>state.categories.categories);
   
     const [openPreview, setOpenPreview] = useState(false);
-    const [category,setCategory] = useState(1)
+    const [category,setCategory] = useState(1);
 
     const NewBlogSchema = Yup.object().shape({
       title: Yup.string().required('Title is required'),

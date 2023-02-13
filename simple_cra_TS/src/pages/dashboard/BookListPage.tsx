@@ -201,7 +201,7 @@ export default function BookListPage() {
                   Reload
             </Button>
             <Button
-                to={PATH_DASHBOARD.user.newAccount}
+                to={PATH_DASHBOARD.book.post}
                 component={RouterLink}
                 variant="contained"
                 startIcon={<Iconify icon="eva:plus-fill" />}
