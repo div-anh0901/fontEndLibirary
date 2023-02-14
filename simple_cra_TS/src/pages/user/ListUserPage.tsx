@@ -32,6 +32,7 @@ import { useAuthContext } from 'src/auth/useAuthContext';
 import { Role, User } from 'src/utils/types';
 import { AddToRoleDialog } from 'src/components/dialog';
 import LoadMoneyDialog from 'src/components/dialog/LoadMoneyDialog';
+import {listUsers} from 'src/utils/axios'
 import { fetchUserThunk, getAllUser } from 'src/redux/slices/user';
 const STATUS_OPTIONS = ['all', 'active', 'banned'];
 
@@ -68,7 +69,6 @@ const TABLE_HEAD = [
 export default function ListUserPage() {
   const dispatch = useDispatch();
   const {user} = useAuthContext();
-  const [listUser,setListUser] = useState<User[]>(useSelector(state=> state.users.users.filter(u => u.id !== user?.id)))
   const {
     dense,
     page,
@@ -95,7 +95,7 @@ export default function ListUserPage() {
 
   const navigate = useNavigate();
 
-  const [tableData, setTableData] = useState<User[]>(listUser);
+  const [tableData, setTableData] = useState<User[]>([]);
 
   const [filterName, setFilterName] = useState('');
 
@@ -109,6 +109,19 @@ export default function ListUserPage() {
   const [openConfirm, setOpenConfirm] = useState(false);
 
   const [filterStatus, setFilterStatus] = useState('all');
+
+  useCallback(()=>{
+    async function fetchData(){
+      try {
+        const res = await listUsers();
+        setTableData(res.data)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchData()
+  },[tableData])
+
 
   const dataFiltered = applyFilter({
     inputData: tableData,

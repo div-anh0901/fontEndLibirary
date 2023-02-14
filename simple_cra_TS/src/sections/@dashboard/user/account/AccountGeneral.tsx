@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import * as Yup from 'yup';
 import { useCallback } from 'react';
 import { useAuthContext } from 'src/auth/useAuthContext';
@@ -15,7 +15,7 @@ import { RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from 'src/compone
 import { fData } from 'src/utils/formatNumber';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'src/redux/store';
-import { createUserThunk, fetchUserThunk } from 'src/redux/slices/user';
+import { createUserThunk, fetchUserThunk, updateUserThunk } from 'src/redux/slices/user';
 import { useNavigate, useParams } from 'react-router';
 type FormValuesProps = {
     name: string;
@@ -57,10 +57,14 @@ export default function AccountGeneral() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [loadingUpload,setLoadingUpload] = useState(false);
+    const [objStatus,setObjStatus] = useState<any>({"0": "ACTIVE", "1":"CLOSED","2":"CANCELED","3":"BLACKLISTED","4":"NONE"});
+    const [objStatusNumber,setObjStatusNumber] = useState<any>({ "ACTIVE": 0, "CLOSED":1,"CANCELED":2,"BLACKLISTED":3,"NONE":4});
     const [getStatus,setGetStatus] = useState(0);
     
     const UpdateUserSchema = Yup.object().shape({
-      username: Yup.string().required('Name is required'),
+      username: Yup.string().required('Username is required'),
+      email: Yup.string().required('Email is required'),
+      name: Yup.string().required('Name is required'),
     });
     
     var defaultValues = {
@@ -75,19 +79,23 @@ export default function AccountGeneral() {
     };
 
     var user = useSelector((state)=>state.users.users.find((u)=> u.email === email));
-    if(user){
-       defaultValues = {
-        name:  user.name,
-        email:  user.email,
-        username:  user.username,
-        password: '12345678',
-        avatar: user.avatar,
-        address: user.address,
-        status:0,
-        virtualWallet:user.virtualWallet
-      };
-    }
+    useMemo(()=>{
+      if(user){
+        setGetStatus(objStatusNumber[user.status])
+         defaultValues = {
+          name:  user.name,
+          email:  user.email,
+          username:  user.username,
+          password: '12345678',
+          avatar: user.avatar,
+          address: user.address,
+          status:objStatusNumber[user.status],
+          virtualWallet:user.virtualWallet
+        };
+      }
+    },[])
   
+
     const methods = useForm<FormValuesProps>({
       resolver: yupResolver(UpdateUserSchema),
       defaultValues,
@@ -103,7 +111,17 @@ export default function AccountGeneral() {
       const onSubmit = async (data: FormValuesProps) => {
         try {
           if(user){
-
+              dispatch(updateUserThunk({
+                id: user.id,
+                name:  data.name,
+                email:  data.email,
+                username:  data.username,
+                password: '12345678',
+                avatar: data.avatar,
+                address: data.address,
+                status: objStatus[data?.status],
+                virtualWallet:data.virtualWallet
+              }))
           }else{
             dispatch(createUserThunk(data));  
             navigate("/dashboard/user/list")

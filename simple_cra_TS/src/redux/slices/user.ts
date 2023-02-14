@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { createUser as createUseAPI, listUsers as listUsersAPI } from "src/utils/axios";
-import { CreateBook, CreateUser, User } from "src/utils/types";
+import { createUser as createUseAPI, listUsers as listUsersAPI, updateUser } from "src/utils/axios";
+import { CreateBook, CreateUser, UpdateUser, User } from "src/utils/types";
 import { RootState } from "../store";
 
 
@@ -20,6 +20,13 @@ export const fetchUserThunk  = createAsyncThunk(
         return listUsersAPI();
     }
 );
+
+export  const updateUserThunk = createAsyncThunk(
+    'update/user',
+    async(data: UpdateUser)=>{
+        return updateUser(data);
+    }
+)
 
 export const createUserThunk = createAsyncThunk(
     'create/user',
@@ -43,6 +50,9 @@ export const usersSlice =  createSlice({
             })
             .addCase(createUserThunk.fulfilled,(state,action)=>{
                 state.users.push(action.payload.data);
+            })
+            .addCase(updateUserThunk.fulfilled, (state,action)=>{
+
             })
     },
 });

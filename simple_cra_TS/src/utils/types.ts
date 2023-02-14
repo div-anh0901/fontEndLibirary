@@ -186,3 +186,15 @@ export type OrderUserMAX = {
     brrowPrice: number;
     depositPrice: number;
 }
+
+export  type UpdateUser ={
+    id: number;
+    name: string;
+    username:string;
+    password: string;
+    email:string;
+    avatar: string;
+    address: string;
+    status:  string;
+    virtualWallet: number;
+}

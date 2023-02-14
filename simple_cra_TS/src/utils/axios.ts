@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 // config
 import { HOST_API_KEY } from '../config';
-import { AddRole, OrderBook, Category, CreateBook, CreateUser, FetchBooks, FetchCategory, PutBook, User, CreateOrder, addOrderItem, FetchOrderItem, ReportOrderbyUserIdType } from './types';
+import { AddRole, OrderBook, Category, CreateBook, CreateUser, FetchBooks, FetchCategory, PutBook, User, CreateOrder, addOrderItem, FetchOrderItem, ReportOrderbyUserIdType, UpdateUser } from './types';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ export const listUsers = ()=> axiosInstance.get<User[]>('/api/users',config);
 export const addRoles = (data: AddRole)=> axiosInstance.post('/api/role/addtouser',data,config);
 export  const  createUser = (data: CreateUser) =>  axiosInstance.post('/api/user/save',data);
 export const updateUserMoneyAPI = (data: User) =>  axiosInstance.put('/api/user/updateMoney?userId='  + data.id,data,config);
-
+export const updateUser = (data:UpdateUser )=>  axiosInstance.put('/api/user/update?userId='+ data.id,data,config);
 //borrowBook order
 export const listOrders = ()=>  axiosInstance.get<OrderBook[]>('/api/orders',config)
 export const createOrder = (data: CreateOrder)=> axiosInstance.post('/api/orders/add?userId=' + data.userId,data,config);
